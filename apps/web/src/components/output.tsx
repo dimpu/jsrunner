@@ -1,10 +1,7 @@
-
-
-
-import MonacoEditor, { Monaco } from '@monaco-editor/react'
-import React from 'react'
+import MonacoEditor from '@monaco-editor/react'
 import { useAppState } from '../context/useAppState'
 import { monacoOptions } from '../constants/monaco-options';
+import Logo from "./nav-bar/logo.svg?react";
 
 const outputOptions = {
   ...monacoOptions,
@@ -26,6 +23,7 @@ const Output = () => {
         theme="vs-dark"
         value={code}
         options={outputOptions}
+        loading={<Logo />}
       />
     </div>
   )

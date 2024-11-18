@@ -24,15 +24,18 @@ function App() {
       <div className='h-screen w-screen bg-slate-800'>
         <Navbar />
         <Split
-          className={'flex  h-full overflow-hidden'}
+          className={'flex h-full overflow-visible'}
           sizes={sizes}
-          gutterSize={4}
+          gutterSize={5}
           cursor="col-resize"
           onDragEnd={handleDragEnd}
+          gutterAlign="center"
+          direction="horizontal"
           gutterStyle={() => ({
-            background: 'rgb(148 163 184)',
+            // background: 'rgb(148 163 184)',
             height: '100%',
-            width: '1px'
+            width: '5px',
+            borderLeft: '1px solid rgb(148 163 184)'
           })}
         >
           <Editor />

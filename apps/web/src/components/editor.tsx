@@ -1,66 +1,50 @@
+import { useEffect, useRef, useState } from 'react'
 
-
-
-import { useEffect } from 'react'
-
-import { initializeEsbuild, transpileCode } from '@jsrunner/common';
+import { initializeEsbuild, transpileCode, transpileAndRun } from '@jsrunner/common';
 import MonacoEditor, { Monaco } from '@monaco-editor/react'
 import debounce from 'lodash-es/debounce';
 import { useAppState } from '../context/useAppState';
 import { editor } from 'monaco-editor'
 import { monacoOptions } from '../constants/monaco-options';
+import Logo from "./nav-bar/logo.svg?react";
 
+const LOCAL_RAW_CODE = 'LOCAL_RAW_CODE';
 
 const Editor = () => {
+
+  const monacoRef = useRef<editor.IStandaloneCodeEditor>()
+  const [rawCode, setRawCode] = useState('');
   const { setCode } = useAppState();
+
   useEffect(() => {
     initializeEsbuild().catch(console.error);
+    const localData = localStorage.getItem(LOCAL_RAW_CODE)
+    setRawCode(localData || '');
+    const compile = async () => {
+      try {
+        const output = await transpileAndRun(localData as string);
+        setCode(output as string);
+      } catch (e) {
+        setCode(e as string);
+      }
+    }
+    compile();
   }, []);
 
-  const transpileAndRun = debounce(async (code?: string) => {
+  const transpileAndRunDebounce = debounce(async (code: string) => {
     if (!code) {
+      setCode('');
       return;
     }
+    localStorage.setItem(LOCAL_RAW_CODE, code)
 
     try {
-      const output = await transpileCode(code);
-      runCode(output);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Transpilation failed:', error.message);
-        // setCode(error?.message);
-      } else {
-        console.log('Transpilation failed:', error)
-        // setCode(error as string);
-      }
+      const output = await transpileAndRun(code);
+      setCode(output as string);
+    } catch (e) {
+      setCode(e as string);
     }
-  });
-
-  const runCode = async (code: string) => {
-    const blob = new Blob([code], { type: "application/javascript" });
-    const blobUrl = URL.createObjectURL(blob);
-
-    const logs: string[] = [];
-    const originalConsoleLog = console.log;
-
-    console.log = (message) => logs.push(message); // Capture console.log output
-
-    try {
-      await import(blobUrl);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.log(error.message)
-        setCode(error?.message);
-      } else {
-        console.log(error)
-        setCode(error as string);
-      }
-    }
-
-    console.log = originalConsoleLog; // Restore console.log
-    setCode(logs.join("\n"))
-    URL.revokeObjectURL(blobUrl);
-  }
+  }, 100);
 
   const handleEditorWillMount = (monaco: Monaco) => {
     import('../onedark.json')
@@ -71,17 +55,39 @@ const Editor = () => {
     monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true)
   }
 
+  const handleMount = (editor: editor.IStandaloneCodeEditor) => {
+    monacoRef.current = editor;
+    editor.focus();
+    (window as any).require.config({
+      paths: {
+        "monaco-vim": "https://unpkg.com/monaco-vim/dist/monaco-vim"
+      }
+    });
+
+    (window as any).require(["monaco-vim"], function (MonacoVim: any) {
+      const statusNode = document.querySelector(".status-node");
+      MonacoVim.initVimMode(editor, statusNode);
+    });
+  }
+
 
   return (
-    <div className='py-4'>
+    <div className='py-4 relative'>
+      <legend className='absolute top-0 right-2 z-50'>
+        <code className="status-node text-slate-400">
+        </code>
+      </legend>
       <MonacoEditor
+        defaultValue={rawCode}
         width={'100%'}
         height={'100%'}
         defaultLanguage="typescript"
         theme="vs-dark"
-        onChange={(newValue) => transpileAndRun(newValue)}
+        onChange={(newValue) => transpileAndRunDebounce(newValue)}
+        onMount={handleMount}
         beforeMount={handleEditorWillMount}
         options={{ ...monacoOptions }}
+        loading={<Logo />}
       />
     </div>
   )

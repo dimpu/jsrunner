@@ -1,31 +1,31 @@
-var Be = { exports: {} };
-(function(xe) {
-  ((Te) => {
-    var ke = Object.defineProperty, ze = Object.getOwnPropertyDescriptor, Ge = Object.getOwnPropertyNames, qe = Object.prototype.hasOwnProperty, Je = (e, n) => {
+var Ge = { exports: {} };
+(function(ie) {
+  ((ne) => {
+    var oe = Object.defineProperty, ye = Object.getOwnPropertyDescriptor, Te = Object.getOwnPropertyNames, ee = Object.prototype.hasOwnProperty, Je = (e, n) => {
       for (var r in n)
-        ke(e, r, { get: n[r], enumerable: !0 });
+        oe(e, r, { get: n[r], enumerable: !0 });
     }, Ye = (e, n, r, c) => {
       if (n && typeof n == "object" || typeof n == "function")
-        for (let g of Ge(n))
-          !qe.call(e, g) && g !== r && ke(e, g, { get: () => n[g], enumerable: !(c = ze(n, g)) || c.enumerable });
+        for (let g of Te(n))
+          !ee.call(e, g) && g !== r && oe(e, g, { get: () => n[g], enumerable: !(c = ye(n, g)) || c.enumerable });
       return e;
-    }, He = (e) => Ye(ke({}, "__esModule", { value: !0 }), e), re = (e, n, r) => new Promise((c, g) => {
+    }, He = (e) => Ye(oe({}, "__esModule", { value: !0 }), e), le = (e, n, r) => new Promise((c, g) => {
       var y = (u) => {
         try {
           _(r.next(u));
-        } catch (U) {
-          g(U);
+        } catch (R) {
+          g(R);
         }
       }, h = (u) => {
         try {
           _(r.throw(u));
-        } catch (U) {
-          g(U);
+        } catch (R) {
+          g(R);
         }
       }, _ = (u) => u.done ? c(u.value) : Promise.resolve(u.value).then(y, h);
       _((r = r.apply(e, n)).next());
-    }), he = {};
-    Je(he, {
+    }), we = {};
+    Je(we, {
       analyzeMetafile: () => gt,
       analyzeMetafileSync: () => vt,
       build: () => ft,
@@ -39,8 +39,8 @@ var Be = { exports: {} };
       transform: () => ht,
       transformSync: () => yt,
       version: () => ut
-    }), Te.exports = He(he);
-    function $e(e) {
+    }), ne.exports = He(we);
+    function Oe(e) {
       let n = (c) => {
         if (c === null)
           r.write8(0);
@@ -49,7 +49,7 @@ var Be = { exports: {} };
         else if (typeof c == "number")
           r.write8(2), r.write32(c | 0);
         else if (typeof c == "string")
-          r.write8(3), r.write(ee(c));
+          r.write8(3), r.write(te(c));
         else if (c instanceof Uint8Array)
           r.write8(4), r.write(c);
         else if (c instanceof Array) {
@@ -60,10 +60,10 @@ var Be = { exports: {} };
           let g = Object.keys(c);
           r.write8(6), r.write32(g.length);
           for (let y of g)
-            r.write(ee(y)), n(c[y]);
+            r.write(te(y)), n(c[y]);
         }
-      }, r = new je();
-      return r.write32(0), r.write32(e.id << 1 | +!e.isRequest), n(e.value), Ee(r.buf, r.len - 4, 0), r.buf.subarray(0, r.len);
+      }, r = new Ce();
+      return r.write32(0), r.write32(e.id << 1 | +!e.isRequest), n(e.value), je(r.buf, r.len - 4, 0), r.buf.subarray(0, r.len);
     }
     function Qe(e) {
       let n = () => {
@@ -75,7 +75,7 @@ var Be = { exports: {} };
           case 2:
             return r.read32();
           case 3:
-            return oe(r.read());
+            return fe(r.read());
           case 4:
             return r.read();
           case 5: {
@@ -87,20 +87,20 @@ var Be = { exports: {} };
           case 6: {
             let h = r.read32(), _ = {};
             for (let u = 0; u < h; u++)
-              _[oe(r.read())] = n();
+              _[fe(r.read())] = n();
             return _;
           }
           default:
             throw new Error("Invalid packet");
         }
-      }, r = new je(e), c = r.read32(), g = (c & 1) === 0;
+      }, r = new Ce(e), c = r.read32(), g = (c & 1) === 0;
       c >>>= 1;
       let y = n();
       if (r.ptr !== e.length)
         throw new Error("Invalid packet");
       return { id: c, isRequest: g, value: y };
     }
-    var je = class {
+    var Ce = class {
       constructor(e = new Uint8Array(1024)) {
         this.buf = e, this.len = 0, this.ptr = 0;
       }
@@ -117,11 +117,11 @@ var Be = { exports: {} };
       }
       write32(e) {
         let n = this._write(4);
-        Ee(this.buf, e, n);
+        je(this.buf, e, n);
       }
       write(e) {
         let n = this._write(4 + e.length);
-        Ee(this.buf, e.length, n), this.buf.set(e, n + 4);
+        je(this.buf, e.length, n), this.buf.set(e, n + 4);
       }
       _read(e) {
         if (this.ptr + e > this.buf.length)
@@ -132,43 +132,43 @@ var Be = { exports: {} };
         return this.buf[this._read(1)];
       }
       read32() {
-        return Pe(this.buf, this._read(4));
+        return Ue(this.buf, this._read(4));
       }
       read() {
         let e = this.read32(), n = new Uint8Array(e), r = this._read(n.length);
         return n.set(this.buf.subarray(r, r + e)), n;
       }
-    }, ee, oe, _e;
+    }, te, fe, $e;
     if (typeof TextEncoder < "u" && typeof TextDecoder < "u") {
       let e = new TextEncoder(), n = new TextDecoder();
-      ee = (r) => e.encode(r), oe = (r) => n.decode(r), _e = 'new TextEncoder().encode("")';
+      te = (r) => e.encode(r), fe = (r) => n.decode(r), $e = 'new TextEncoder().encode("")';
     } else if (typeof Buffer < "u")
-      ee = (e) => Buffer.from(e), oe = (e) => {
+      te = (e) => Buffer.from(e), fe = (e) => {
         let { buffer: n, byteOffset: r, byteLength: c } = e;
         return Buffer.from(n, r, c).toString();
-      }, _e = 'Buffer.from("")';
+      }, $e = 'Buffer.from("")';
     else
       throw new Error("No UTF-8 codec found");
-    if (!(ee("") instanceof Uint8Array))
-      throw new Error(`Invariant violation: "${_e} instanceof Uint8Array" is incorrectly false
+    if (!(te("") instanceof Uint8Array))
+      throw new Error(`Invariant violation: "${$e} instanceof Uint8Array" is incorrectly false
 
 This indicates that your JavaScript environment is broken. You cannot use
 esbuild in this environment because esbuild relies on this invariant. This
 is not a problem with esbuild. You need to fix your environment instead.
 `);
-    function Pe(e, n) {
+    function Ue(e, n) {
       return e[n++] | e[n++] << 8 | e[n++] << 16 | e[n++] << 24;
     }
-    function Ee(e, n, r) {
+    function je(e, n, r) {
       e[r++] = n, e[r++] = n >> 8, e[r++] = n >> 16, e[r++] = n >> 24;
     }
-    var J = JSON.stringify, Oe = "warning", Ce = "silent";
-    function De(e) {
+    var J = JSON.stringify, De = "warning", Re = "silent";
+    function Ae(e) {
       if (H(e, "target"), e.indexOf(",") >= 0) throw new Error(`Invalid target: ${e}`);
       return e;
     }
-    var me = () => null, B = (e) => typeof e == "boolean" ? null : "a boolean", j = (e) => typeof e == "string" ? null : "a string", ge = (e) => e instanceof RegExp ? null : "a RegExp object", ie = (e) => typeof e == "number" && e === (e | 0) ? null : "an integer", Ae = (e) => typeof e == "function" ? null : "a function", G = (e) => Array.isArray(e) ? null : "an array", X = (e) => typeof e == "object" && e !== null && !Array.isArray(e) ? null : "an object", Xe = (e) => typeof e == "object" && e !== null ? null : "an array or an object", Ke = (e) => e instanceof WebAssembly.Module ? null : "a WebAssembly.Module", Ue = (e) => typeof e == "object" && !Array.isArray(e) ? null : "an object or null", Re = (e) => typeof e == "string" || typeof e == "boolean" ? null : "a string or a boolean", Ze = (e) => typeof e == "string" || typeof e == "object" && e !== null && !Array.isArray(e) ? null : "a string or an object", et = (e) => typeof e == "string" || Array.isArray(e) ? null : "a string or an array", Ie = (e) => typeof e == "string" || e instanceof Uint8Array ? null : "a string or a Uint8Array", tt = (e) => typeof e == "string" || e instanceof URL ? null : "a string or a URL";
-    function s(e, n, r, c) {
+    var ve = () => null, B = (e) => typeof e == "boolean" ? null : "a boolean", j = (e) => typeof e == "string" ? null : "a string", be = (e) => e instanceof RegExp ? null : "a RegExp object", ae = (e) => typeof e == "number" && e === (e | 0) ? null : "an integer", Ie = (e) => typeof e == "function" ? null : "a function", G = (e) => Array.isArray(e) ? null : "an array", X = (e) => typeof e == "object" && e !== null && !Array.isArray(e) ? null : "an object", Xe = (e) => typeof e == "object" && e !== null ? null : "an array or an object", Ke = (e) => e instanceof WebAssembly.Module ? null : "a WebAssembly.Module", Me = (e) => typeof e == "object" && !Array.isArray(e) ? null : "an object or null", Fe = (e) => typeof e == "string" || typeof e == "boolean" ? null : "a string or a boolean", Ze = (e) => typeof e == "string" || typeof e == "object" && e !== null && !Array.isArray(e) ? null : "a string or an object", et = (e) => typeof e == "string" || Array.isArray(e) ? null : "a string or an array", Ne = (e) => typeof e == "string" || e instanceof Uint8Array ? null : "a string or a Uint8Array", tt = (e) => typeof e == "string" || e instanceof URL ? null : "a string or a URL";
+    function i(e, n, r, c) {
       let g = e[r];
       if (n[r + ""] = !0, g === void 0) return;
       let y = c(g);
@@ -181,14 +181,14 @@ is not a problem with esbuild. You need to fix your environment instead.
           throw new Error(`Invalid option ${r}: ${J(c)}`);
     }
     function nt(e) {
-      let n = /* @__PURE__ */ Object.create(null), r = s(e, n, "wasmURL", tt), c = s(e, n, "wasmModule", Ke), g = s(e, n, "worker", B);
+      let n = /* @__PURE__ */ Object.create(null), r = i(e, n, "wasmURL", tt), c = i(e, n, "wasmModule", Ke), g = i(e, n, "worker", B);
       return Y(e, n, "in initialize() call"), {
         wasmURL: r,
         wasmModule: c,
         worker: g
       };
     }
-    function Me(e) {
+    function Le(e) {
       let n;
       if (e !== void 0) {
         n = /* @__PURE__ */ Object.create(null);
@@ -202,8 +202,8 @@ is not a problem with esbuild. You need to fix your environment instead.
       }
       return n;
     }
-    function pe(e, n, r, c, g) {
-      let y = s(n, r, "color", B), h = s(n, r, "logLevel", j), _ = s(n, r, "logLimit", ie);
+    function xe(e, n, r, c, g) {
+      let y = i(n, r, "color", B), h = i(n, r, "logLevel", j), _ = i(n, r, "logLimit", ae);
       y !== void 0 ? e.push(`--color=${y}`) : c && e.push("--color=true"), e.push(`--log-level=${h || g}`), e.push(`--log-limit=${_ || 0}`);
     }
     function H(e, n, r) {
@@ -211,10 +211,10 @@ is not a problem with esbuild. You need to fix your environment instead.
         throw new Error(`Expected value for ${n}${r !== void 0 ? " " + J(r) : ""} to be a string, got ${typeof e} instead`);
       return e;
     }
-    function Fe(e, n, r) {
-      let c = s(n, r, "legalComments", j), g = s(n, r, "sourceRoot", j), y = s(n, r, "sourcesContent", B), h = s(n, r, "target", et), _ = s(n, r, "format", j), u = s(n, r, "globalName", j), U = s(n, r, "mangleProps", ge), R = s(n, r, "reserveProps", ge), P = s(n, r, "mangleQuoted", B), V = s(n, r, "minify", B), D = s(n, r, "minifySyntax", B), M = s(n, r, "minifyWhitespace", B), F = s(n, r, "minifyIdentifiers", B), $ = s(n, r, "lineLimit", ie), z = s(n, r, "drop", G), S = s(n, r, "dropLabels", G), E = s(n, r, "charset", j), p = s(n, r, "treeShaking", B), f = s(n, r, "ignoreAnnotations", B), i = s(n, r, "jsx", j), o = s(n, r, "jsxFactory", j), d = s(n, r, "jsxFragment", j), b = s(n, r, "jsxImportSource", j), x = s(n, r, "jsxDev", B), a = s(n, r, "jsxSideEffects", B), m = s(n, r, "define", X), t = s(n, r, "logOverride", X), l = s(n, r, "supported", X), w = s(n, r, "pure", G), v = s(n, r, "keepNames", B), T = s(n, r, "platform", j), A = s(n, r, "tsconfigRaw", Ze);
-      if (c && e.push(`--legal-comments=${c}`), g !== void 0 && e.push(`--source-root=${g}`), y !== void 0 && e.push(`--sources-content=${y}`), h && (Array.isArray(h) ? e.push(`--target=${Array.from(h).map(De).join(",")}`) : e.push(`--target=${De(h)}`)), _ && e.push(`--format=${_}`), u && e.push(`--global-name=${u}`), T && e.push(`--platform=${T}`), A && e.push(`--tsconfig-raw=${typeof A == "string" ? A : JSON.stringify(A)}`), V && e.push("--minify"), D && e.push("--minify-syntax"), M && e.push("--minify-whitespace"), F && e.push("--minify-identifiers"), $ && e.push(`--line-limit=${$}`), E && e.push(`--charset=${E}`), p !== void 0 && e.push(`--tree-shaking=${p}`), f && e.push("--ignore-annotations"), z) for (let C of z) e.push(`--drop:${H(C, "drop")}`);
-      if (S && e.push(`--drop-labels=${Array.from(S).map((C) => H(C, "dropLabels")).join(",")}`), U && e.push(`--mangle-props=${U.source}`), R && e.push(`--reserve-props=${R.source}`), P !== void 0 && e.push(`--mangle-quoted=${P}`), i && e.push(`--jsx=${i}`), o && e.push(`--jsx-factory=${o}`), d && e.push(`--jsx-fragment=${d}`), b && e.push(`--jsx-import-source=${b}`), x && e.push("--jsx-dev"), a && e.push("--jsx-side-effects"), m)
+    function Ve(e, n, r) {
+      let c = i(n, r, "legalComments", j), g = i(n, r, "sourceRoot", j), y = i(n, r, "sourcesContent", B), h = i(n, r, "target", et), _ = i(n, r, "format", j), u = i(n, r, "globalName", j), R = i(n, r, "mangleProps", be), A = i(n, r, "reserveProps", be), P = i(n, r, "mangleQuoted", B), L = i(n, r, "minify", B), U = i(n, r, "minifySyntax", B), M = i(n, r, "minifyWhitespace", B), F = i(n, r, "minifyIdentifiers", B), $ = i(n, r, "lineLimit", ae), z = i(n, r, "drop", G), S = i(n, r, "dropLabels", G), E = i(n, r, "charset", j), p = i(n, r, "treeShaking", B), f = i(n, r, "ignoreAnnotations", B), s = i(n, r, "jsx", j), o = i(n, r, "jsxFactory", j), d = i(n, r, "jsxFragment", j), b = i(n, r, "jsxImportSource", j), x = i(n, r, "jsxDev", B), a = i(n, r, "jsxSideEffects", B), m = i(n, r, "define", X), t = i(n, r, "logOverride", X), l = i(n, r, "supported", X), w = i(n, r, "pure", G), v = i(n, r, "keepNames", B), T = i(n, r, "platform", j), D = i(n, r, "tsconfigRaw", Ze);
+      if (c && e.push(`--legal-comments=${c}`), g !== void 0 && e.push(`--source-root=${g}`), y !== void 0 && e.push(`--sources-content=${y}`), h && (Array.isArray(h) ? e.push(`--target=${Array.from(h).map(Ae).join(",")}`) : e.push(`--target=${Ae(h)}`)), _ && e.push(`--format=${_}`), u && e.push(`--global-name=${u}`), T && e.push(`--platform=${T}`), D && e.push(`--tsconfig-raw=${typeof D == "string" ? D : JSON.stringify(D)}`), L && e.push("--minify"), U && e.push("--minify-syntax"), M && e.push("--minify-whitespace"), F && e.push("--minify-identifiers"), $ && e.push(`--line-limit=${$}`), E && e.push(`--charset=${E}`), p !== void 0 && e.push(`--tree-shaking=${p}`), f && e.push("--ignore-annotations"), z) for (let C of z) e.push(`--drop:${H(C, "drop")}`);
+      if (S && e.push(`--drop-labels=${Array.from(S).map((C) => H(C, "dropLabels")).join(",")}`), R && e.push(`--mangle-props=${R.source}`), A && e.push(`--reserve-props=${A.source}`), P !== void 0 && e.push(`--mangle-quoted=${P}`), s && e.push(`--jsx=${s}`), o && e.push(`--jsx-factory=${o}`), d && e.push(`--jsx-fragment=${d}`), b && e.push(`--jsx-import-source=${b}`), x && e.push("--jsx-dev"), a && e.push("--jsx-side-effects"), m)
         for (let C in m) {
           if (C.indexOf("=") >= 0) throw new Error(`Invalid define: ${C}`);
           e.push(`--define:${C}=${H(m[C], "define", C)}`);
@@ -236,10 +236,10 @@ is not a problem with esbuild. You need to fix your environment instead.
     }
     function rt(e, n, r, c, g) {
       var y;
-      let h = [], _ = [], u = /* @__PURE__ */ Object.create(null), U = null, R = null;
-      pe(h, n, u, r, c), Fe(h, n, u);
-      let P = s(n, u, "sourcemap", Re), V = s(n, u, "bundle", B), D = s(n, u, "splitting", B), M = s(n, u, "preserveSymlinks", B), F = s(n, u, "metafile", B), $ = s(n, u, "outfile", j), z = s(n, u, "outdir", j), S = s(n, u, "outbase", j), E = s(n, u, "tsconfig", j), p = s(n, u, "resolveExtensions", G), f = s(n, u, "nodePaths", G), i = s(n, u, "mainFields", G), o = s(n, u, "conditions", G), d = s(n, u, "external", G), b = s(n, u, "packages", j), x = s(n, u, "alias", X), a = s(n, u, "loader", X), m = s(n, u, "outExtension", X), t = s(n, u, "publicPath", j), l = s(n, u, "entryNames", j), w = s(n, u, "chunkNames", j), v = s(n, u, "assetNames", j), T = s(n, u, "inject", G), A = s(n, u, "banner", X), C = s(n, u, "footer", X), O = s(n, u, "entryPoints", Xe), L = s(n, u, "absWorkingDir", j), I = s(n, u, "stdin", X), N = (y = s(n, u, "write", B)) != null ? y : g, K = s(n, u, "allowOverwrite", B), q = s(n, u, "mangleCache", X);
-      if (u.plugins = !0, Y(n, u, `in ${e}() call`), P && h.push(`--sourcemap${P === !0 ? "" : `=${P}`}`), V && h.push("--bundle"), K && h.push("--allow-overwrite"), D && h.push("--splitting"), M && h.push("--preserve-symlinks"), F && h.push("--metafile"), $ && h.push(`--outfile=${$}`), z && h.push(`--outdir=${z}`), S && h.push(`--outbase=${S}`), E && h.push(`--tsconfig=${E}`), b && h.push(`--packages=${b}`), p) {
+      let h = [], _ = [], u = /* @__PURE__ */ Object.create(null), R = null, A = null;
+      xe(h, n, u, r, c), Ve(h, n, u);
+      let P = i(n, u, "sourcemap", Fe), L = i(n, u, "bundle", B), U = i(n, u, "splitting", B), M = i(n, u, "preserveSymlinks", B), F = i(n, u, "metafile", B), $ = i(n, u, "outfile", j), z = i(n, u, "outdir", j), S = i(n, u, "outbase", j), E = i(n, u, "tsconfig", j), p = i(n, u, "resolveExtensions", G), f = i(n, u, "nodePaths", G), s = i(n, u, "mainFields", G), o = i(n, u, "conditions", G), d = i(n, u, "external", G), b = i(n, u, "packages", j), x = i(n, u, "alias", X), a = i(n, u, "loader", X), m = i(n, u, "outExtension", X), t = i(n, u, "publicPath", j), l = i(n, u, "entryNames", j), w = i(n, u, "chunkNames", j), v = i(n, u, "assetNames", j), T = i(n, u, "inject", G), D = i(n, u, "banner", X), C = i(n, u, "footer", X), O = i(n, u, "entryPoints", Xe), V = i(n, u, "absWorkingDir", j), I = i(n, u, "stdin", X), N = (y = i(n, u, "write", B)) != null ? y : g, K = i(n, u, "allowOverwrite", B), q = i(n, u, "mangleCache", X);
+      if (u.plugins = !0, Y(n, u, `in ${e}() call`), P && h.push(`--sourcemap${P === !0 ? "" : `=${P}`}`), L && h.push("--bundle"), K && h.push("--allow-overwrite"), U && h.push("--splitting"), M && h.push("--preserve-symlinks"), F && h.push("--metafile"), $ && h.push(`--outfile=${$}`), z && h.push(`--outdir=${z}`), S && h.push(`--outbase=${S}`), E && h.push(`--tsconfig=${E}`), b && h.push(`--packages=${b}`), p) {
         let k = [];
         for (let W of p) {
           if (H(W, "resolve extension"), W.indexOf(",") >= 0) throw new Error(`Invalid resolve extension: ${W}`);
@@ -247,9 +247,9 @@ is not a problem with esbuild. You need to fix your environment instead.
         }
         h.push(`--resolve-extensions=${k.join(",")}`);
       }
-      if (t && h.push(`--public-path=${t}`), l && h.push(`--entry-names=${l}`), w && h.push(`--chunk-names=${w}`), v && h.push(`--asset-names=${v}`), i) {
+      if (t && h.push(`--public-path=${t}`), l && h.push(`--entry-names=${l}`), w && h.push(`--chunk-names=${w}`), v && h.push(`--asset-names=${v}`), s) {
         let k = [];
-        for (let W of i) {
+        for (let W of s) {
           if (H(W, "main field"), W.indexOf(",") >= 0) throw new Error(`Invalid main field: ${W}`);
           k.push(W);
         }
@@ -269,10 +269,10 @@ is not a problem with esbuild. You need to fix your environment instead.
           if (k.indexOf("=") >= 0) throw new Error(`Invalid package name in alias: ${k}`);
           h.push(`--alias:${k}=${H(x[k], "alias", k)}`);
         }
-      if (A)
-        for (let k in A) {
+      if (D)
+        for (let k in D) {
           if (k.indexOf("=") >= 0) throw new Error(`Invalid banner file type: ${k}`);
-          h.push(`--banner:${k}=${H(A[k], "banner", k)}`);
+          h.push(`--banner:${k}=${H(D[k], "banner", k)}`);
         }
       if (C)
         for (let k in C) {
@@ -295,10 +295,10 @@ is not a problem with esbuild. You need to fix your environment instead.
           for (let k = 0, W = O.length; k < W; k++) {
             let Z = O[k];
             if (typeof Z == "object" && Z !== null) {
-              let te = /* @__PURE__ */ Object.create(null), Q = s(Z, te, "in", j), de = s(Z, te, "out", j);
-              if (Y(Z, te, "in entry point at index " + k), Q === void 0) throw new Error('Missing property "in" for entry point at index ' + k);
-              if (de === void 0) throw new Error('Missing property "out" for entry point at index ' + k);
-              _.push([de, Q]);
+              let re = /* @__PURE__ */ Object.create(null), Q = i(Z, re, "in", j), pe = i(Z, re, "out", j);
+              if (Y(Z, re, "in entry point at index " + k), Q === void 0) throw new Error('Missing property "in" for entry point at index ' + k);
+              if (pe === void 0) throw new Error('Missing property "out" for entry point at index ' + k);
+              _.push([pe, Q]);
             } else
               _.push(["", H(Z, "entry point at index " + k)]);
           }
@@ -306,70 +306,70 @@ is not a problem with esbuild. You need to fix your environment instead.
           for (let k in O)
             _.push([k, H(O[k], "entry point", k)]);
       if (I) {
-        let k = /* @__PURE__ */ Object.create(null), W = s(I, k, "contents", Ie), Z = s(I, k, "resolveDir", j), te = s(I, k, "sourcefile", j), Q = s(I, k, "loader", j);
-        Y(I, k, 'in "stdin" object'), te && h.push(`--sourcefile=${te}`), Q && h.push(`--loader=${Q}`), Z && (R = Z), typeof W == "string" ? U = ee(W) : W instanceof Uint8Array && (U = W);
+        let k = /* @__PURE__ */ Object.create(null), W = i(I, k, "contents", Ne), Z = i(I, k, "resolveDir", j), re = i(I, k, "sourcefile", j), Q = i(I, k, "loader", j);
+        Y(I, k, 'in "stdin" object'), re && h.push(`--sourcefile=${re}`), Q && h.push(`--loader=${Q}`), Z && (A = Z), typeof W == "string" ? R = te(W) : W instanceof Uint8Array && (R = W);
       }
-      let ce = [];
+      let he = [];
       if (f)
         for (let k of f)
-          k += "", ce.push(k);
+          k += "", he.push(k);
       return {
         entries: _,
         flags: h,
         write: N,
-        stdinContents: U,
-        stdinResolveDir: R,
-        absWorkingDir: L,
-        nodePaths: ce,
-        mangleCache: Me(q)
+        stdinContents: R,
+        stdinResolveDir: A,
+        absWorkingDir: V,
+        nodePaths: he,
+        mangleCache: Le(q)
       };
     }
-    function it(e, n, r, c) {
+    function st(e, n, r, c) {
       let g = [], y = /* @__PURE__ */ Object.create(null);
-      pe(g, n, y, r, c), Fe(g, n, y);
-      let h = s(n, y, "sourcemap", Re), _ = s(n, y, "sourcefile", j), u = s(n, y, "loader", j), U = s(n, y, "banner", j), R = s(n, y, "footer", j), P = s(n, y, "mangleCache", X);
-      return Y(n, y, `in ${e}() call`), h && g.push(`--sourcemap=${h === !0 ? "external" : h}`), _ && g.push(`--sourcefile=${_}`), u && g.push(`--loader=${u}`), U && g.push(`--banner=${U}`), R && g.push(`--footer=${R}`), {
+      xe(g, n, y, r, c), Ve(g, n, y);
+      let h = i(n, y, "sourcemap", Fe), _ = i(n, y, "sourcefile", j), u = i(n, y, "loader", j), R = i(n, y, "banner", j), A = i(n, y, "footer", j), P = i(n, y, "mangleCache", X);
+      return Y(n, y, `in ${e}() call`), h && g.push(`--sourcemap=${h === !0 ? "external" : h}`), _ && g.push(`--sourcefile=${_}`), u && g.push(`--loader=${u}`), R && g.push(`--banner=${R}`), A && g.push(`--footer=${A}`), {
         flags: g,
-        mangleCache: Me(P)
+        mangleCache: Le(P)
       };
     }
-    function st(e) {
+    function it(e) {
       const n = {}, r = { didClose: !1, reason: "" };
       let c = {}, g = 0, y = 0, h = new Uint8Array(16 * 1024), _ = 0, u = (E) => {
         let p = _ + E.length;
         if (p > h.length) {
-          let i = new Uint8Array(p * 2);
-          i.set(h), h = i;
+          let s = new Uint8Array(p * 2);
+          s.set(h), h = s;
         }
         h.set(E, _), _ += E.length;
         let f = 0;
         for (; f + 4 <= _; ) {
-          let i = Pe(h, f);
-          if (f + 4 + i > _)
+          let s = Ue(h, f);
+          if (f + 4 + s > _)
             break;
-          f += 4, M(h.subarray(f, f + i)), f += i;
+          f += 4, M(h.subarray(f, f + s)), f += s;
         }
         f > 0 && (h.copyWithin(0, f, _), _ -= f);
-      }, U = (E) => {
+      }, R = (E) => {
         r.didClose = !0, E && (r.reason = ": " + (E.message || E));
         const p = "The service was stopped" + r.reason;
         for (let f in c)
           c[f](p, null);
         c = {};
-      }, R = (E, p, f) => {
+      }, A = (E, p, f) => {
         if (r.didClose) return f("The service is no longer running" + r.reason, null);
-        let i = g++;
-        c[i] = (o, d) => {
+        let s = g++;
+        c[s] = (o, d) => {
           try {
             f(o, d);
           } finally {
             E && E.unref();
           }
-        }, E && E.ref(), e.writeToStdin($e({ id: i, isRequest: !0, value: p }));
+        }, E && E.ref(), e.writeToStdin(Oe({ id: s, isRequest: !0, value: p }));
       }, P = (E, p) => {
         if (r.didClose) throw new Error("The service is no longer running" + r.reason);
-        e.writeToStdin($e({ id: E, isRequest: !1, value: p }));
-      }, V = (E, p) => re(this, null, function* () {
+        e.writeToStdin(Oe({ id: E, isRequest: !1, value: p }));
+      }, L = (E, p) => le(this, null, function* () {
         try {
           if (p.command === "ping") {
             P(E, {});
@@ -379,23 +379,23 @@ is not a problem with esbuild. You need to fix your environment instead.
             const f = n[p.key];
             if (!f)
               return;
-            const i = f[p.command];
-            if (i) {
-              yield i(E, p);
+            const s = f[p.command];
+            if (s) {
+              yield s(E, p);
               return;
             }
           }
           throw new Error("Invalid command: " + p.command);
         } catch (f) {
-          const i = [se(f, e, null, void 0, "")];
+          const s = [ce(f, e, null, void 0, "")];
           try {
-            P(E, { errors: i });
+            P(E, { errors: s });
           } catch {
           }
         }
-      }), D = !0, M = (E) => {
-        if (D) {
-          D = !1;
+      }), U = !0, M = (E) => {
+        if (U) {
+          U = !1;
           let f = String.fromCharCode(...E);
           if (f !== "0.24.0")
             throw new Error(`Cannot start service: Host version "0.24.0" does not match binary version ${J(f)}`);
@@ -403,7 +403,7 @@ is not a problem with esbuild. You need to fix your environment instead.
         }
         let p = Qe(E);
         if (p.isRequest)
-          V(p.id, p.value);
+          L(p.id, p.value);
         else {
           let f = c[p.id];
           delete c[p.id], p.value.error ? f(p.value.error, {}) : f(null, p.value);
@@ -411,9 +411,9 @@ is not a problem with esbuild. You need to fix your environment instead.
       };
       return {
         readFromStdout: u,
-        afterClose: U,
+        afterClose: R,
         service: {
-          buildOrContext: ({ callName: E, refs: p, options: f, isTTY: i, defaultWD: o, callback: d }) => {
+          buildOrContext: ({ callName: E, refs: p, options: f, isTTY: s, defaultWD: o, callback: d }) => {
             let b = 0;
             const x = y++, a = {}, m = {
               ref() {
@@ -426,13 +426,13 @@ is not a problem with esbuild. You need to fix your environment instead.
             n[x] = a, m.ref(), lt(
               E,
               x,
-              R,
+              A,
               P,
               m,
               e,
               a,
               f,
-              i,
+              s,
               o,
               (t, l) => {
                 try {
@@ -443,8 +443,8 @@ is not a problem with esbuild. You need to fix your environment instead.
               }
             );
           },
-          transform: ({ callName: E, refs: p, input: f, options: i, isTTY: o, fs: d, callback: b }) => {
-            const x = Ne();
+          transform: ({ callName: E, refs: p, input: f, options: s, isTTY: o, fs: d, callback: b }) => {
+            const x = Be();
             let a = (m) => {
               try {
                 if (typeof f != "string" && !(f instanceof Uint8Array))
@@ -452,15 +452,15 @@ is not a problem with esbuild. You need to fix your environment instead.
                 let {
                   flags: t,
                   mangleCache: l
-                } = it(E, i, o, Ce), w = {
+                } = st(E, s, o, Re), w = {
                   command: "transform",
                   flags: t,
                   inputFS: m !== null,
-                  input: m !== null ? ee(m) : typeof f == "string" ? ee(f) : f
+                  input: m !== null ? te(m) : typeof f == "string" ? te(f) : f
                 };
-                l && (w.mangleCache = l), R(p, w, (v, T) => {
+                l && (w.mangleCache = l), A(p, w, (v, T) => {
                   if (v) return b(new Error(v), null);
-                  let A = ae(T.errors, x), C = ae(T.warnings, x), O = 1, L = () => {
+                  let D = de(T.errors, x), C = de(T.warnings, x), O = 1, V = () => {
                     if (--O === 0) {
                       let I = {
                         warnings: C,
@@ -472,22 +472,22 @@ is not a problem with esbuild. You need to fix your environment instead.
                       "legalComments" in T && (I.legalComments = T == null ? void 0 : T.legalComments), T.mangleCache && (I.mangleCache = T == null ? void 0 : T.mangleCache), b(null, I);
                     }
                   };
-                  if (A.length > 0) return b(ue("Transform failed", A, C), null);
+                  if (D.length > 0) return b(me("Transform failed", D, C), null);
                   T.codeFS && (O++, d.readFile(T.code, (I, N) => {
-                    I !== null ? b(I, null) : (T.code = N, L());
+                    I !== null ? b(I, null) : (T.code = N, V());
                   })), T.mapFS && (O++, d.readFile(T.map, (I, N) => {
-                    I !== null ? b(I, null) : (T.map = N, L());
-                  })), L();
+                    I !== null ? b(I, null) : (T.map = N, V());
+                  })), V();
                 });
               } catch (t) {
                 let l = [];
                 try {
-                  pe(l, i, {}, o, Ce);
+                  xe(l, s, {}, o, Re);
                 } catch {
                 }
-                const w = se(t, e, x, void 0, "");
-                R(p, { command: "error", flags: l, error: w }, () => {
-                  w.detail = x.load(w.detail), b(ue("Transform failed", [w], []), null);
+                const w = ce(t, e, x, void 0, "");
+                A(p, { command: "error", flags: l, error: w }, () => {
+                  w.detail = x.load(w.detail), b(me("Transform failed", [w], []), null);
                 });
               }
             };
@@ -497,30 +497,30 @@ is not a problem with esbuild. You need to fix your environment instead.
             }
             a(null);
           },
-          formatMessages: ({ callName: E, refs: p, messages: f, options: i, callback: o }) => {
-            if (!i) throw new Error(`Missing second argument in ${E}() call`);
-            let d = {}, b = s(i, d, "kind", j), x = s(i, d, "color", B), a = s(i, d, "terminalWidth", ie);
-            if (Y(i, d, `in ${E}() call`), b === void 0) throw new Error(`Missing "kind" in ${E}() call`);
+          formatMessages: ({ callName: E, refs: p, messages: f, options: s, callback: o }) => {
+            if (!s) throw new Error(`Missing second argument in ${E}() call`);
+            let d = {}, b = i(s, d, "kind", j), x = i(s, d, "color", B), a = i(s, d, "terminalWidth", ae);
+            if (Y(s, d, `in ${E}() call`), b === void 0) throw new Error(`Missing "kind" in ${E}() call`);
             if (b !== "error" && b !== "warning") throw new Error(`Expected "kind" to be "error" or "warning" in ${E}() call`);
             let m = {
               command: "format-msgs",
-              messages: ne(f, "messages", null, "", a),
+              messages: se(f, "messages", null, "", a),
               isWarning: b === "warning"
             };
-            x !== void 0 && (m.color = x), a !== void 0 && (m.terminalWidth = a), R(p, m, (t, l) => {
+            x !== void 0 && (m.color = x), a !== void 0 && (m.terminalWidth = a), A(p, m, (t, l) => {
               if (t) return o(new Error(t), null);
               o(null, l.messages);
             });
           },
-          analyzeMetafile: ({ callName: E, refs: p, metafile: f, options: i, callback: o }) => {
-            i === void 0 && (i = {});
-            let d = {}, b = s(i, d, "color", B), x = s(i, d, "verbose", B);
-            Y(i, d, `in ${E}() call`);
+          analyzeMetafile: ({ callName: E, refs: p, metafile: f, options: s, callback: o }) => {
+            s === void 0 && (s = {});
+            let d = {}, b = i(s, d, "color", B), x = i(s, d, "verbose", B);
+            Y(s, d, `in ${E}() call`);
             let a = {
               command: "analyze-metafile",
               metafile: f
             };
-            b !== void 0 && (a.color = b), x !== void 0 && (a.verbose = x), R(p, a, (m, t) => {
+            b !== void 0 && (a.color = b), x !== void 0 && (a.verbose = x), A(p, a, (m, t) => {
               if (m) return o(new Error(m), null);
               o(null, t.result);
             });
@@ -528,28 +528,28 @@ is not a problem with esbuild. You need to fix your environment instead.
         }
       };
     }
-    function lt(e, n, r, c, g, y, h, _, u, U, R) {
-      const P = Ne(), V = e === "context", D = ($, z) => {
+    function lt(e, n, r, c, g, y, h, _, u, R, A) {
+      const P = Be(), L = e === "context", U = ($, z) => {
         const S = [];
         try {
-          pe(S, _, {}, u, Oe);
+          xe(S, _, {}, u, De);
         } catch {
         }
-        const E = se($, y, P, void 0, z);
+        const E = ce($, y, P, void 0, z);
         r(g, { command: "error", flags: S, error: E }, () => {
-          E.detail = P.load(E.detail), R(ue(V ? "Context failed" : "Build failed", [E], []), null);
+          E.detail = P.load(E.detail), A(me(L ? "Context failed" : "Build failed", [E], []), null);
         });
       };
       let M;
       if (typeof _ == "object") {
         const $ = _.plugins;
         if ($ !== void 0) {
-          if (!Array.isArray($)) return D(new Error('"plugins" must be an array'), "");
+          if (!Array.isArray($)) return U(new Error('"plugins" must be an array'), "");
           M = $;
         }
       }
       if (M && M.length > 0) {
-        if (y.isSync) return D(new Error("Cannot use plugins in synchronous API calls"), "");
+        if (y.isSync) return U(new Error("Cannot use plugins in synchronous API calls"), "");
         ot(
           n,
           r,
@@ -562,14 +562,14 @@ is not a problem with esbuild. You need to fix your environment instead.
           P
         ).then(
           ($) => {
-            if (!$.ok) return D($.error, $.pluginName);
+            if (!$.ok) return U($.error, $.pluginName);
             try {
               F($.requestPlugins, $.runOnEndCallbacks, $.scheduleOnDisposeCallbacks);
             } catch (z) {
-              D(z, "");
+              U(z, "");
             }
           },
-          ($) => D($, "")
+          ($) => U($, "")
         );
         return;
       }
@@ -577,108 +577,108 @@ is not a problem with esbuild. You need to fix your environment instead.
         F(null, ($, z) => z([], []), () => {
         });
       } catch ($) {
-        D($, "");
+        U($, "");
       }
       function F($, z, S) {
         const E = y.hasFS, {
           entries: p,
           flags: f,
-          write: i,
+          write: s,
           stdinContents: o,
           stdinResolveDir: d,
           absWorkingDir: b,
           nodePaths: x,
           mangleCache: a
-        } = rt(e, _, u, Oe, E);
-        if (i && !y.hasFS) throw new Error('The "write" option is unavailable in this environment');
+        } = rt(e, _, u, De, E);
+        if (s && !y.hasFS) throw new Error('The "write" option is unavailable in this environment');
         const m = {
           command: "build",
           key: n,
           entries: p,
           flags: f,
-          write: i,
+          write: s,
           stdinContents: o,
           stdinResolveDir: d,
-          absWorkingDir: b || U,
+          absWorkingDir: b || R,
           nodePaths: x,
-          context: V
+          context: L
         };
         $ && (m.plugins = $), a && (m.mangleCache = a);
         const t = (v, T) => {
-          const A = {
-            errors: ae(v.errors, P),
-            warnings: ae(v.warnings, P),
+          const D = {
+            errors: de(v.errors, P),
+            warnings: de(v.warnings, P),
             outputFiles: void 0,
             metafile: void 0,
             mangleCache: void 0
-          }, C = A.errors.slice(), O = A.warnings.slice();
-          v.outputFiles && (A.outputFiles = v.outputFiles.map(ct)), v.metafile && (A.metafile = JSON.parse(v.metafile)), v.mangleCache && (A.mangleCache = v.mangleCache), v.writeToStdout !== void 0 && console.log(oe(v.writeToStdout).replace(/\n$/, "")), z(A, (L, I) => {
-            if (C.length > 0 || L.length > 0) {
-              const N = ue("Build failed", C.concat(L), O.concat(I));
-              return T(N, null, L, I);
+          }, C = D.errors.slice(), O = D.warnings.slice();
+          v.outputFiles && (D.outputFiles = v.outputFiles.map(ct)), v.metafile && (D.metafile = JSON.parse(v.metafile)), v.mangleCache && (D.mangleCache = v.mangleCache), v.writeToStdout !== void 0 && console.log(fe(v.writeToStdout).replace(/\n$/, "")), z(D, (V, I) => {
+            if (C.length > 0 || V.length > 0) {
+              const N = me("Build failed", C.concat(V), O.concat(I));
+              return T(N, null, V, I);
             }
-            T(null, A, L, I);
+            T(null, D, V, I);
           });
         };
         let l, w;
-        V && (h["on-end"] = (v, T) => new Promise((A) => {
-          t(T, (C, O, L, I) => {
+        L && (h["on-end"] = (v, T) => new Promise((D) => {
+          t(T, (C, O, V, I) => {
             const N = {
-              errors: L,
+              errors: V,
               warnings: I
             };
-            w && w(C, O), l = void 0, w = void 0, c(v, N), A();
+            w && w(C, O), l = void 0, w = void 0, c(v, N), D();
           });
         })), r(g, m, (v, T) => {
-          if (v) return R(new Error(v), null);
-          if (!V)
-            return t(T, (O, L) => (S(), R(O, L)));
+          if (v) return A(new Error(v), null);
+          if (!L)
+            return t(T, (O, V) => (S(), A(O, V)));
           if (T.errors.length > 0)
-            return R(ue("Context failed", T.errors, T.warnings), null);
-          let A = !1;
+            return A(me("Context failed", T.errors, T.warnings), null);
+          let D = !1;
           const C = {
-            rebuild: () => (l || (l = new Promise((O, L) => {
+            rebuild: () => (l || (l = new Promise((O, V) => {
               let I;
               w = (K, q) => {
-                I || (I = () => K ? L(K) : O(q));
+                I || (I = () => K ? V(K) : O(q));
               };
               const N = () => {
                 r(g, {
                   command: "rebuild",
                   key: n
-                }, (q, ce) => {
-                  q ? L(new Error(q)) : I ? I() : N();
+                }, (q, he) => {
+                  q ? V(new Error(q)) : I ? I() : N();
                 });
               };
               N();
             })), l),
-            watch: (O = {}) => new Promise((L, I) => {
+            watch: (O = {}) => new Promise((V, I) => {
               if (!y.hasFS) throw new Error('Cannot use the "watch" API in this environment');
               Y(O, {}, "in watch() call"), r(g, {
                 command: "watch",
                 key: n
               }, (q) => {
-                q ? I(new Error(q)) : L(void 0);
+                q ? I(new Error(q)) : V(void 0);
               });
             }),
-            serve: (O = {}) => new Promise((L, I) => {
+            serve: (O = {}) => new Promise((V, I) => {
               if (!y.hasFS) throw new Error('Cannot use the "serve" API in this environment');
-              const N = {}, K = s(O, N, "port", ie), q = s(O, N, "host", j), ce = s(O, N, "servedir", j), k = s(O, N, "keyfile", j), W = s(O, N, "certfile", j), Z = s(O, N, "fallback", j), te = s(O, N, "onRequest", Ae);
+              const N = {}, K = i(O, N, "port", ae), q = i(O, N, "host", j), he = i(O, N, "servedir", j), k = i(O, N, "keyfile", j), W = i(O, N, "certfile", j), Z = i(O, N, "fallback", j), re = i(O, N, "onRequest", Ie);
               Y(O, N, "in serve() call");
               const Q = {
                 command: "serve",
                 key: n,
-                onRequest: !!te
+                onRequest: !!re
               };
-              K !== void 0 && (Q.port = K), q !== void 0 && (Q.host = q), ce !== void 0 && (Q.servedir = ce), k !== void 0 && (Q.keyfile = k), W !== void 0 && (Q.certfile = W), Z !== void 0 && (Q.fallback = Z), r(g, Q, (de, Et) => {
-                if (de) return I(new Error(de));
-                te && (h["serve-request"] = (St, Tt) => {
-                  te(Tt.args), c(St, {});
-                }), L(Et);
+              K !== void 0 && (Q.port = K), q !== void 0 && (Q.host = q), he !== void 0 && (Q.servedir = he), k !== void 0 && (Q.keyfile = k), W !== void 0 && (Q.certfile = W), Z !== void 0 && (Q.fallback = Z), r(g, Q, (pe, Et) => {
+                if (pe) return I(new Error(pe));
+                re && (h["serve-request"] = (St, Tt) => {
+                  re(Tt.args), c(St, {});
+                }), V(Et);
               });
             }),
             cancel: () => new Promise((O) => {
-              if (A) return O();
+              if (D) return O();
               r(g, {
                 command: "cancel",
                 key: n
@@ -687,8 +687,8 @@ is not a problem with esbuild. You need to fix your environment instead.
               });
             }),
             dispose: () => new Promise((O) => {
-              if (A) return O();
-              A = !0, r(g, {
+              if (D) return O();
+              D = !0, r(g, {
                 command: "dispose",
                 key: n
               }, () => {
@@ -696,24 +696,24 @@ is not a problem with esbuild. You need to fix your environment instead.
               });
             })
           };
-          g.ref(), R(null, C);
+          g.ref(), A(null, C);
         });
       }
     }
-    var ot = (e, n, r, c, g, y, h, _, u) => re(void 0, null, function* () {
-      let U = [], R = [], P = {}, V = {}, D = [], M = 0, F = 0, $ = [], z = !1;
+    var ot = (e, n, r, c, g, y, h, _, u) => le(void 0, null, function* () {
+      let R = [], A = [], P = {}, L = {}, U = [], M = 0, F = 0, $ = [], z = !1;
       _ = [..._];
       for (let p of _) {
         let f = {};
         if (typeof p != "object") throw new Error(`Plugin at index ${F} must be an object`);
-        const i = s(p, f, "name", j);
-        if (typeof i != "string" || i === "") throw new Error(`Plugin at index ${F} is missing a name`);
+        const s = i(p, f, "name", j);
+        if (typeof s != "string" || s === "") throw new Error(`Plugin at index ${F} is missing a name`);
         try {
-          let o = s(p, f, "setup", Ae);
+          let o = i(p, f, "setup", Ie);
           if (typeof o != "function") throw new Error("Plugin is missing a setup function");
-          Y(p, f, `on plugin ${J(i)}`);
+          Y(p, f, `on plugin ${J(s)}`);
           let d = {
-            name: i,
+            name: s,
             onStart: !1,
             onEnd: !1,
             onResolve: [],
@@ -725,20 +725,20 @@ is not a problem with esbuild. You need to fix your environment instead.
             resolve: (a, m = {}) => {
               if (!z) throw new Error('Cannot call "resolve" before plugin setup has completed');
               if (typeof a != "string") throw new Error("The path to resolve must be a string");
-              let t = /* @__PURE__ */ Object.create(null), l = s(m, t, "pluginName", j), w = s(m, t, "importer", j), v = s(m, t, "namespace", j), T = s(m, t, "resolveDir", j), A = s(m, t, "kind", j), C = s(m, t, "pluginData", me), O = s(m, t, "with", X);
-              return Y(m, t, "in resolve() call"), new Promise((L, I) => {
+              let t = /* @__PURE__ */ Object.create(null), l = i(m, t, "pluginName", j), w = i(m, t, "importer", j), v = i(m, t, "namespace", j), T = i(m, t, "resolveDir", j), D = i(m, t, "kind", j), C = i(m, t, "pluginData", ve), O = i(m, t, "with", X);
+              return Y(m, t, "in resolve() call"), new Promise((V, I) => {
                 const N = {
                   command: "resolve",
                   path: a,
                   key: e,
-                  pluginName: i
+                  pluginName: s
                 };
-                if (l != null && (N.pluginName = l), w != null && (N.importer = w), v != null && (N.namespace = v), T != null && (N.resolveDir = T), A != null) N.kind = A;
+                if (l != null && (N.pluginName = l), w != null && (N.importer = w), v != null && (N.namespace = v), T != null && (N.resolveDir = T), D != null) N.kind = D;
                 else throw new Error('Must specify "kind" when calling "resolve"');
                 C != null && (N.pluginData = u.store(C)), O != null && (N.with = at(O, "with")), n(c, N, (K, q) => {
-                  K !== null ? I(new Error(K)) : L({
-                    errors: ae(q.errors, u),
-                    warnings: ae(q.warnings, u),
+                  K !== null ? I(new Error(K)) : V({
+                    errors: de(q.errors, u),
+                    warnings: de(q.warnings, u),
                     path: q.path,
                     external: q.external,
                     sideEffects: q.sideEffects,
@@ -750,52 +750,52 @@ is not a problem with esbuild. You need to fix your environment instead.
               });
             },
             onStart(a) {
-              let m = 'This error came from the "onStart" callback registered here:', t = ye(new Error(m), g, "onStart");
-              U.push({ name: i, callback: a, note: t }), d.onStart = !0;
+              let m = 'This error came from the "onStart" callback registered here:', t = ke(new Error(m), g, "onStart");
+              R.push({ name: s, callback: a, note: t }), d.onStart = !0;
             },
             onEnd(a) {
-              let m = 'This error came from the "onEnd" callback registered here:', t = ye(new Error(m), g, "onEnd");
-              R.push({ name: i, callback: a, note: t }), d.onEnd = !0;
+              let m = 'This error came from the "onEnd" callback registered here:', t = ke(new Error(m), g, "onEnd");
+              A.push({ name: s, callback: a, note: t }), d.onEnd = !0;
             },
             onResolve(a, m) {
-              let t = 'This error came from the "onResolve" callback registered here:', l = ye(new Error(t), g, "onResolve"), w = {}, v = s(a, w, "filter", ge), T = s(a, w, "namespace", j);
-              if (Y(a, w, `in onResolve() call for plugin ${J(i)}`), v == null) throw new Error("onResolve() call is missing a filter");
-              let A = M++;
-              P[A] = { name: i, callback: m, note: l }, d.onResolve.push({ id: A, filter: v.source, namespace: T || "" });
+              let t = 'This error came from the "onResolve" callback registered here:', l = ke(new Error(t), g, "onResolve"), w = {}, v = i(a, w, "filter", be), T = i(a, w, "namespace", j);
+              if (Y(a, w, `in onResolve() call for plugin ${J(s)}`), v == null) throw new Error("onResolve() call is missing a filter");
+              let D = M++;
+              P[D] = { name: s, callback: m, note: l }, d.onResolve.push({ id: D, filter: v.source, namespace: T || "" });
             },
             onLoad(a, m) {
-              let t = 'This error came from the "onLoad" callback registered here:', l = ye(new Error(t), g, "onLoad"), w = {}, v = s(a, w, "filter", ge), T = s(a, w, "namespace", j);
-              if (Y(a, w, `in onLoad() call for plugin ${J(i)}`), v == null) throw new Error("onLoad() call is missing a filter");
-              let A = M++;
-              V[A] = { name: i, callback: m, note: l }, d.onLoad.push({ id: A, filter: v.source, namespace: T || "" });
+              let t = 'This error came from the "onLoad" callback registered here:', l = ke(new Error(t), g, "onLoad"), w = {}, v = i(a, w, "filter", be), T = i(a, w, "namespace", j);
+              if (Y(a, w, `in onLoad() call for plugin ${J(s)}`), v == null) throw new Error("onLoad() call is missing a filter");
+              let D = M++;
+              L[D] = { name: s, callback: m, note: l }, d.onLoad.push({ id: D, filter: v.source, namespace: T || "" });
             },
             onDispose(a) {
-              D.push(a);
+              U.push(a);
             },
             esbuild: g.esbuild
           });
           x && (yield x), $.push(d);
         } catch (o) {
-          return { ok: !1, error: o, pluginName: i };
+          return { ok: !1, error: o, pluginName: s };
         }
       }
-      y["on-start"] = (p, f) => re(void 0, null, function* () {
+      y["on-start"] = (p, f) => le(void 0, null, function* () {
         u.clear();
-        let i = { errors: [], warnings: [] };
-        yield Promise.all(U.map((o) => re(void 0, [o], function* ({ name: d, callback: b, note: x }) {
+        let s = { errors: [], warnings: [] };
+        yield Promise.all(R.map((o) => le(void 0, [o], function* ({ name: d, callback: b, note: x }) {
           try {
             let a = yield b();
             if (a != null) {
               if (typeof a != "object") throw new Error(`Expected onStart() callback in plugin ${J(d)} to return an object`);
-              let m = {}, t = s(a, m, "errors", G), l = s(a, m, "warnings", G);
-              Y(a, m, `from onStart() callback in plugin ${J(d)}`), t != null && i.errors.push(...ne(t, "errors", u, d, void 0)), l != null && i.warnings.push(...ne(l, "warnings", u, d, void 0));
+              let m = {}, t = i(a, m, "errors", G), l = i(a, m, "warnings", G);
+              Y(a, m, `from onStart() callback in plugin ${J(d)}`), t != null && s.errors.push(...se(t, "errors", u, d, void 0)), l != null && s.warnings.push(...se(l, "warnings", u, d, void 0));
             }
           } catch (a) {
-            i.errors.push(se(a, g, u, x && x(), d));
+            s.errors.push(ce(a, g, u, x && x(), d));
           }
-        }))), r(p, i);
-      }), y["on-resolve"] = (p, f) => re(void 0, null, function* () {
-        let i = {}, o = "", d, b;
+        }))), r(p, s);
+      }), y["on-resolve"] = (p, f) => le(void 0, null, function* () {
+        let s = {}, o = "", d, b;
         for (let x of f.ids)
           try {
             ({ name: o, callback: d, note: b } = P[x]);
@@ -810,20 +810,20 @@ is not a problem with esbuild. You need to fix your environment instead.
             });
             if (a != null) {
               if (typeof a != "object") throw new Error(`Expected onResolve() callback in plugin ${J(o)} to return an object`);
-              let m = {}, t = s(a, m, "pluginName", j), l = s(a, m, "path", j), w = s(a, m, "namespace", j), v = s(a, m, "suffix", j), T = s(a, m, "external", B), A = s(a, m, "sideEffects", B), C = s(a, m, "pluginData", me), O = s(a, m, "errors", G), L = s(a, m, "warnings", G), I = s(a, m, "watchFiles", G), N = s(a, m, "watchDirs", G);
-              Y(a, m, `from onResolve() callback in plugin ${J(o)}`), i.id = x, t != null && (i.pluginName = t), l != null && (i.path = l), w != null && (i.namespace = w), v != null && (i.suffix = v), T != null && (i.external = T), A != null && (i.sideEffects = A), C != null && (i.pluginData = u.store(C)), O != null && (i.errors = ne(O, "errors", u, o, void 0)), L != null && (i.warnings = ne(L, "warnings", u, o, void 0)), I != null && (i.watchFiles = we(I, "watchFiles")), N != null && (i.watchDirs = we(N, "watchDirs"));
+              let m = {}, t = i(a, m, "pluginName", j), l = i(a, m, "path", j), w = i(a, m, "namespace", j), v = i(a, m, "suffix", j), T = i(a, m, "external", B), D = i(a, m, "sideEffects", B), C = i(a, m, "pluginData", ve), O = i(a, m, "errors", G), V = i(a, m, "warnings", G), I = i(a, m, "watchFiles", G), N = i(a, m, "watchDirs", G);
+              Y(a, m, `from onResolve() callback in plugin ${J(o)}`), s.id = x, t != null && (s.pluginName = t), l != null && (s.path = l), w != null && (s.namespace = w), v != null && (s.suffix = v), T != null && (s.external = T), D != null && (s.sideEffects = D), C != null && (s.pluginData = u.store(C)), O != null && (s.errors = se(O, "errors", u, o, void 0)), V != null && (s.warnings = se(V, "warnings", u, o, void 0)), I != null && (s.watchFiles = _e(I, "watchFiles")), N != null && (s.watchDirs = _e(N, "watchDirs"));
               break;
             }
           } catch (a) {
-            i = { id: x, errors: [se(a, g, u, b && b(), o)] };
+            s = { id: x, errors: [ce(a, g, u, b && b(), o)] };
             break;
           }
-        r(p, i);
-      }), y["on-load"] = (p, f) => re(void 0, null, function* () {
-        let i = {}, o = "", d, b;
+        r(p, s);
+      }), y["on-load"] = (p, f) => le(void 0, null, function* () {
+        let s = {}, o = "", d, b;
         for (let x of f.ids)
           try {
-            ({ name: o, callback: d, note: b } = V[x]);
+            ({ name: o, callback: d, note: b } = L[x]);
             let a = yield d({
               path: f.path,
               namespace: f.namespace,
@@ -833,34 +833,34 @@ is not a problem with esbuild. You need to fix your environment instead.
             });
             if (a != null) {
               if (typeof a != "object") throw new Error(`Expected onLoad() callback in plugin ${J(o)} to return an object`);
-              let m = {}, t = s(a, m, "pluginName", j), l = s(a, m, "contents", Ie), w = s(a, m, "resolveDir", j), v = s(a, m, "pluginData", me), T = s(a, m, "loader", j), A = s(a, m, "errors", G), C = s(a, m, "warnings", G), O = s(a, m, "watchFiles", G), L = s(a, m, "watchDirs", G);
-              Y(a, m, `from onLoad() callback in plugin ${J(o)}`), i.id = x, t != null && (i.pluginName = t), l instanceof Uint8Array ? i.contents = l : l != null && (i.contents = ee(l)), w != null && (i.resolveDir = w), v != null && (i.pluginData = u.store(v)), T != null && (i.loader = T), A != null && (i.errors = ne(A, "errors", u, o, void 0)), C != null && (i.warnings = ne(C, "warnings", u, o, void 0)), O != null && (i.watchFiles = we(O, "watchFiles")), L != null && (i.watchDirs = we(L, "watchDirs"));
+              let m = {}, t = i(a, m, "pluginName", j), l = i(a, m, "contents", Ne), w = i(a, m, "resolveDir", j), v = i(a, m, "pluginData", ve), T = i(a, m, "loader", j), D = i(a, m, "errors", G), C = i(a, m, "warnings", G), O = i(a, m, "watchFiles", G), V = i(a, m, "watchDirs", G);
+              Y(a, m, `from onLoad() callback in plugin ${J(o)}`), s.id = x, t != null && (s.pluginName = t), l instanceof Uint8Array ? s.contents = l : l != null && (s.contents = te(l)), w != null && (s.resolveDir = w), v != null && (s.pluginData = u.store(v)), T != null && (s.loader = T), D != null && (s.errors = se(D, "errors", u, o, void 0)), C != null && (s.warnings = se(C, "warnings", u, o, void 0)), O != null && (s.watchFiles = _e(O, "watchFiles")), V != null && (s.watchDirs = _e(V, "watchDirs"));
               break;
             }
           } catch (a) {
-            i = { id: x, errors: [se(a, g, u, b && b(), o)] };
+            s = { id: x, errors: [ce(a, g, u, b && b(), o)] };
             break;
           }
-        r(p, i);
+        r(p, s);
       });
       let S = (p, f) => f([], []);
-      R.length > 0 && (S = (p, f) => {
-        re(void 0, null, function* () {
-          const i = [], o = [];
-          for (const { name: d, callback: b, note: x } of R) {
+      A.length > 0 && (S = (p, f) => {
+        le(void 0, null, function* () {
+          const s = [], o = [];
+          for (const { name: d, callback: b, note: x } of A) {
             let a, m;
             try {
               const t = yield b(p);
               if (t != null) {
                 if (typeof t != "object") throw new Error(`Expected onEnd() callback in plugin ${J(d)} to return an object`);
-                let l = {}, w = s(t, l, "errors", G), v = s(t, l, "warnings", G);
-                Y(t, l, `from onEnd() callback in plugin ${J(d)}`), w != null && (a = ne(w, "errors", u, d, void 0)), v != null && (m = ne(v, "warnings", u, d, void 0));
+                let l = {}, w = i(t, l, "errors", G), v = i(t, l, "warnings", G);
+                Y(t, l, `from onEnd() callback in plugin ${J(d)}`), w != null && (a = se(w, "errors", u, d, void 0)), v != null && (m = se(v, "warnings", u, d, void 0));
               }
             } catch (t) {
-              a = [se(t, g, u, x && x(), d)];
+              a = [ce(t, g, u, x && x(), d)];
             }
             if (a) {
-              i.push(...a);
+              s.push(...a);
               try {
                 p.errors.push(...a);
               } catch {
@@ -874,11 +874,11 @@ is not a problem with esbuild. You need to fix your environment instead.
               }
             }
           }
-          f(i, o);
+          f(s, o);
         });
       });
       let E = () => {
-        for (const p of D)
+        for (const p of U)
           setTimeout(() => p(), 0);
       };
       return z = !0, {
@@ -888,7 +888,7 @@ is not a problem with esbuild. You need to fix your environment instead.
         scheduleOnDisposeCallbacks: E
       };
     });
-    function Ne() {
+    function Be() {
       const e = /* @__PURE__ */ new Map();
       let n = 0;
       return {
@@ -905,7 +905,7 @@ is not a problem with esbuild. You need to fix your environment instead.
         }
       };
     }
-    function ye(e, n, r) {
+    function ke(e, n, r) {
       let c, g = !1;
       return () => {
         if (g) return c;
@@ -914,27 +914,27 @@ is not a problem with esbuild. You need to fix your environment instead.
           let y = (e.stack + "").split(`
 `);
           y.splice(1, 1);
-          let h = Ve(n, y, r);
+          let h = We(n, y, r);
           if (h)
             return c = { text: e.message, location: h }, c;
         } catch {
         }
       };
     }
-    function se(e, n, r, c, g) {
+    function ce(e, n, r, c, g) {
       let y = "Internal error", h = null;
       try {
         y = (e && e.message || e) + "";
       } catch {
       }
       try {
-        h = Ve(n, (e.stack + "").split(`
+        h = We(n, (e.stack + "").split(`
 `), "");
       } catch {
       }
       return { id: "", pluginName: g, text: y, location: h, notes: c ? [c] : [], detail: r ? r.store(e) : -1 };
     }
-    function Ve(e, n, r) {
+    function We(e, n, r) {
       let c = "    at ";
       if (e.readFileSync && !n[0].startsWith(c) && n[1].startsWith(c))
         for (let g = 1; g < n.length; g++) {
@@ -957,13 +957,13 @@ is not a problem with esbuild. You need to fix your environment instead.
                 } catch {
                   break;
                 }
-                let u = _.split(/\r\n|\r|\n|\u2028|\u2029/)[+h[2] - 1] || "", U = +h[3] - 1, R = u.slice(U, U + r.length) === r ? r.length : 0;
+                let u = _.split(/\r\n|\r|\n|\u2028|\u2029/)[+h[2] - 1] || "", R = +h[3] - 1, A = u.slice(R, R + r.length) === r ? r.length : 0;
                 return {
                   file: h[1],
                   namespace: "file",
                   line: +h[2],
-                  column: ee(u.slice(0, U)).length,
-                  length: ee(u.slice(U, U + R)).length,
+                  column: te(u.slice(0, R)).length,
+                  length: te(u.slice(R, R + A)).length,
                   lineText: u + `
 ` + n.slice(1).join(`
 `),
@@ -975,16 +975,16 @@ is not a problem with esbuild. You need to fix your environment instead.
         }
       return null;
     }
-    function ue(e, n, r) {
+    function me(e, n, r) {
       let c = 5;
       e += n.length < 1 ? "" : ` with ${n.length} error${n.length < 2 ? "" : "s"}:` + n.slice(0, c + 1).map((y, h) => {
         if (h === c) return `
 ...`;
         if (!y.location) return `
 error: ${y.text}`;
-        let { file: _, line: u, column: U } = y.location, R = y.pluginName ? `[plugin: ${y.pluginName}] ` : "";
+        let { file: _, line: u, column: R } = y.location, A = y.pluginName ? `[plugin: ${y.pluginName}] ` : "";
         return `
-${_}:${u}:${U}: ERROR: ${R}${y.text}`;
+${_}:${u}:${R}: ERROR: ${A}${y.text}`;
       }).join("");
       let g = new Error(e);
       for (const [y, h] of [["errors", n], ["warnings", r]])
@@ -1000,20 +1000,20 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
         });
       return g;
     }
-    function ae(e, n) {
+    function de(e, n) {
       for (const r of e)
         r.detail = n.load(r.detail);
       return e;
     }
-    function Le(e, n, r) {
+    function ze(e, n, r) {
       if (e == null) return null;
-      let c = {}, g = s(e, c, "file", j), y = s(e, c, "namespace", j), h = s(e, c, "line", ie), _ = s(e, c, "column", ie), u = s(e, c, "length", ie), U = s(e, c, "lineText", j), R = s(e, c, "suggestion", j);
-      if (Y(e, c, n), U) {
-        const P = U.slice(
+      let c = {}, g = i(e, c, "file", j), y = i(e, c, "namespace", j), h = i(e, c, "line", ae), _ = i(e, c, "column", ae), u = i(e, c, "length", ae), R = i(e, c, "lineText", j), A = i(e, c, "suggestion", j);
+      if (Y(e, c, n), R) {
+        const P = R.slice(
           0,
           (_ && _ > 0 ? _ : 0) + (u && u > 0 ? u : 0) + (r && r > 0 ? r : 80)
         );
-        !/[\x7F-\uFFFF]/.test(P) && !/\n/.test(U) && (U = P);
+        !/[\x7F-\uFFFF]/.test(P) && !/\n/.test(R) && (R = P);
       }
       return {
         file: g || "",
@@ -1021,36 +1021,36 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
         line: h || 0,
         column: _ || 0,
         length: u || 0,
-        lineText: U || "",
-        suggestion: R || ""
+        lineText: R || "",
+        suggestion: A || ""
       };
     }
-    function ne(e, n, r, c, g) {
+    function se(e, n, r, c, g) {
       let y = [], h = 0;
       for (const _ of e) {
-        let u = {}, U = s(_, u, "id", j), R = s(_, u, "pluginName", j), P = s(_, u, "text", j), V = s(_, u, "location", Ue), D = s(_, u, "notes", G), M = s(_, u, "detail", me), F = `in element ${h} of "${n}"`;
+        let u = {}, R = i(_, u, "id", j), A = i(_, u, "pluginName", j), P = i(_, u, "text", j), L = i(_, u, "location", Me), U = i(_, u, "notes", G), M = i(_, u, "detail", ve), F = `in element ${h} of "${n}"`;
         Y(_, u, F);
         let $ = [];
-        if (D)
-          for (const z of D) {
-            let S = {}, E = s(z, S, "text", j), p = s(z, S, "location", Ue);
+        if (U)
+          for (const z of U) {
+            let S = {}, E = i(z, S, "text", j), p = i(z, S, "location", Me);
             Y(z, S, F), $.push({
               text: E || "",
-              location: Le(p, F, g)
+              location: ze(p, F, g)
             });
           }
         y.push({
-          id: U || "",
-          pluginName: R || c,
+          id: R || "",
+          pluginName: A || c,
           text: P || "",
-          location: Le(V, F, g),
+          location: ze(L, F, g),
           notes: $,
           detail: r ? r.store(M) : -1
         }), h++;
       }
       return y;
     }
-    function we(e, n) {
+    function _e(e, n) {
       const r = [];
       for (const c of e) {
         if (typeof c != "string") throw new Error(`${J(n)} must be an array of strings`);
@@ -1075,11 +1075,11 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
         hash: r,
         get text() {
           const g = this.contents;
-          return (c === null || g !== n) && (n = g, c = oe(g)), c;
+          return (c === null || g !== n) && (n = g, c = fe(g)), c;
         }
       };
     }
-    var ut = "0.24.0", ft = (e) => fe().build(e), dt = (e) => fe().context(e), ht = (e, n) => fe().transform(e, n), mt = (e, n) => fe().formatMessages(e, n), gt = (e, n) => fe().analyzeMetafile(e, n), pt = () => {
+    var ut = "0.24.0", ft = (e) => ge().build(e), dt = (e) => ge().context(e), ht = (e, n) => ge().transform(e, n), mt = (e, n) => ge().formatMessages(e, n), gt = (e, n) => ge().analyzeMetafile(e, n), pt = () => {
       throw new Error('The "buildSync" API only works in node');
     }, yt = () => {
       throw new Error('The "transformSync" API only works in node');
@@ -1087,18 +1087,18 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
       throw new Error('The "formatMessagesSync" API only works in node');
     }, vt = () => {
       throw new Error('The "analyzeMetafileSync" API only works in node');
-    }, bt = () => (ve && ve(), Promise.resolve()), le, ve, be, fe = () => {
-      if (be) return be;
-      throw le ? new Error('You need to wait for the promise returned from "initialize" to be resolved before calling this') : new Error('You need to call "initialize" before calling this');
+    }, bt = () => (Ee && Ee(), Promise.resolve()), ue, Ee, Se, ge = () => {
+      if (Se) return Se;
+      throw ue ? new Error('You need to wait for the promise returned from "initialize" to be resolved before calling this') : new Error('You need to call "initialize" before calling this');
     }, xt = (e) => {
       e = nt(e || {});
       let n = e.wasmURL, r = e.wasmModule, c = e.worker !== !1;
       if (!n && !r) throw new Error('Must provide either the "wasmURL" option or the "wasmModule" option');
-      if (le) throw new Error('Cannot call "initialize" more than once');
-      return le = kt(n || "", r, c), le.catch(() => {
-        le = void 0;
-      }), le;
-    }, kt = (e, n, r) => re(void 0, null, function* () {
+      if (ue) throw new Error('Cannot call "initialize" more than once');
+      return ue = kt(n || "", r, c), ue.catch(() => {
+        ue = void 0;
+      }), ue;
+    }, kt = (e, n, r) => le(void 0, null, function* () {
       let c, g;
       const y = new Promise((P) => g = P);
       if (r) {
@@ -1771,19 +1771,19 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
     })(postMessage)`], { type: "text/javascript" });
         c = new Worker(URL.createObjectURL(P));
       } else {
-        let P = ((D) => {
-          var M = (S, E, p) => new Promise((f, i) => {
+        let P = ((U) => {
+          var M = (S, E, p) => new Promise((f, s) => {
             var o = (x) => {
               try {
                 b(p.next(x));
               } catch (a) {
-                i(a);
+                s(a);
               }
             }, d = (x) => {
               try {
                 b(p.throw(x));
               } catch (a) {
-                i(a);
+                s(a);
               }
             }, b = (x) => x.done ? f(x.value) : Promise.resolve(x.value).then(o, d);
             b((p = p.apply(S, E)).next());
@@ -1802,87 +1802,87 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
               $.fs = {
                 constants: { O_WRONLY: -1, O_RDWR: -1, O_CREAT: -1, O_TRUNC: -1, O_APPEND: -1, O_EXCL: -1 },
                 // unused
-                writeSync(i, o) {
+                writeSync(s, o) {
                   f += p.decode(o);
                   const d = f.lastIndexOf(`
 `);
                   return d != -1 && (console.log(f.substring(0, d)), f = f.substring(d + 1)), o.length;
                 },
-                write(i, o, d, b, x, a) {
+                write(s, o, d, b, x, a) {
                   if (d !== 0 || b !== o.length || x !== null) {
                     a(S());
                     return;
                   }
-                  const m = this.writeSync(i, o);
+                  const m = this.writeSync(s, o);
                   a(null, m);
                 },
-                chmod(i, o, d) {
+                chmod(s, o, d) {
                   d(S());
                 },
-                chown(i, o, d, b) {
+                chown(s, o, d, b) {
                   b(S());
                 },
-                close(i, o) {
+                close(s, o) {
                   o(S());
                 },
-                fchmod(i, o, d) {
+                fchmod(s, o, d) {
                   d(S());
                 },
-                fchown(i, o, d, b) {
+                fchown(s, o, d, b) {
                   b(S());
                 },
-                fstat(i, o) {
+                fstat(s, o) {
                   o(S());
                 },
-                fsync(i, o) {
+                fsync(s, o) {
                   o(null);
                 },
-                ftruncate(i, o, d) {
+                ftruncate(s, o, d) {
                   d(S());
                 },
-                lchown(i, o, d, b) {
+                lchown(s, o, d, b) {
                   b(S());
                 },
-                link(i, o, d) {
+                link(s, o, d) {
                   d(S());
                 },
-                lstat(i, o) {
+                lstat(s, o) {
                   o(S());
                 },
-                mkdir(i, o, d) {
+                mkdir(s, o, d) {
                   d(S());
                 },
-                open(i, o, d, b) {
+                open(s, o, d, b) {
                   b(S());
                 },
-                read(i, o, d, b, x, a) {
+                read(s, o, d, b, x, a) {
                   a(S());
                 },
-                readdir(i, o) {
+                readdir(s, o) {
                   o(S());
                 },
-                readlink(i, o) {
+                readlink(s, o) {
                   o(S());
                 },
-                rename(i, o, d) {
+                rename(s, o, d) {
                   d(S());
                 },
-                rmdir(i, o) {
+                rmdir(s, o) {
                   o(S());
                 },
-                stat(i, o) {
+                stat(s, o) {
                   o(S());
                 },
-                symlink(i, o, d) {
+                symlink(s, o, d) {
                   d(S());
                 },
-                truncate(i, o, d) {
+                truncate(s, o, d) {
                   d(S());
                 },
-                unlink(i, o) {
+                unlink(s, o) {
                   o(S());
                 },
-                utimes(i, o, d, b) {
+                utimes(s, o, d, b) {
                   b(S());
                 }
               };
@@ -1932,7 +1932,7 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
                 }), this._pendingEvent = null, this._scheduledTimeouts = /* @__PURE__ */ new Map(), this._nextCallbackTimeoutID = 1;
                 const f = (t, l) => {
                   this.mem.setUint32(t + 0, l, !0), this.mem.setUint32(t + 4, Math.floor(l / 4294967296), !0);
-                }, i = (t) => {
+                }, s = (t) => {
                   const l = this.mem.getUint32(t + 0, !0), w = this.mem.getInt32(t + 4, !0);
                   return l + w * 4294967296;
                 }, o = (t) => {
@@ -1975,15 +1975,15 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
                   }
                   this.mem.setUint32(t + 4, 2146959360 | T, !0), this.mem.setUint32(t, v, !0);
                 }, b = (t) => {
-                  const l = i(t + 0), w = i(t + 8);
+                  const l = s(t + 0), w = s(t + 8);
                   return new Uint8Array(this._inst.exports.mem.buffer, l, w);
                 }, x = (t) => {
-                  const l = i(t + 0), w = i(t + 8), v = new Array(w);
+                  const l = s(t + 0), w = s(t + 8), v = new Array(w);
                   for (let T = 0; T < w; T++)
                     v[T] = o(l + T * 8);
                   return v;
                 }, a = (t) => {
-                  const l = i(t + 0), w = i(t + 8);
+                  const l = s(t + 0), w = s(t + 8);
                   return p.decode(new DataView(this._inst.exports.mem.buffer, l, w));
                 }, m = Date.now() - performance.now();
                 this.importObject = {
@@ -2004,7 +2004,7 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
                     // func wasmWrite(fd uintptr, p unsafe.Pointer, n int32)
                     "runtime.wasmWrite": (t) => {
                       t >>>= 0;
-                      const l = i(t + 8), w = i(t + 16), v = this.mem.getInt32(t + 24, !0);
+                      const l = s(t + 8), w = s(t + 16), v = this.mem.getInt32(t + 24, !0);
                       $.fs.writeSync(l, new Uint8Array(this._inst.exports.mem.buffer, w, v));
                     },
                     // func resetMemoryDataView()
@@ -2030,7 +2030,7 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
                           for (this._resume(); this._scheduledTimeouts.has(l); )
                             console.warn("scheduleTimeoutEvent: missed timeout event"), this._resume();
                         },
-                        i(t + 8)
+                        s(t + 8)
                       )), this.mem.setInt32(t + 16, l, !0);
                     },
                     // func clearTimeoutEvent(id int32)
@@ -2072,11 +2072,11 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
                     },
                     // func valueIndex(v ref, i int) ref
                     "syscall/js.valueIndex": (t) => {
-                      t >>>= 0, d(t + 24, Reflect.get(o(t + 8), i(t + 16)));
+                      t >>>= 0, d(t + 24, Reflect.get(o(t + 8), s(t + 16)));
                     },
                     // valueSetIndex(v ref, i int, x ref)
                     "syscall/js.valueSetIndex": (t) => {
-                      t >>>= 0, Reflect.set(o(t + 8), i(t + 16), o(t + 24));
+                      t >>>= 0, Reflect.set(o(t + 8), s(t + 16), o(t + 24));
                     },
                     // func valueCall(v ref, m string, args []ref) (ref, bool)
                     "syscall/js.valueCall": (t) => {
@@ -2178,20 +2178,20 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
                     [$, 5],
                     [this, 6]
                   ]), this._idPool = [], this.exited = !1;
-                  let i = 4096;
+                  let s = 4096;
                   const o = (t) => {
-                    const l = i, w = E.encode(t + "\0");
-                    return new Uint8Array(this.mem.buffer, i, w.length).set(w), i += w.length, i % 8 !== 0 && (i += 8 - i % 8), l;
+                    const l = s, w = E.encode(t + "\0");
+                    return new Uint8Array(this.mem.buffer, s, w.length).set(w), s += w.length, s % 8 !== 0 && (s += 8 - s % 8), l;
                   }, d = this.argv.length, b = [];
                   this.argv.forEach((t) => {
                     b.push(o(t));
                   }), b.push(0), Object.keys(this.env).sort().forEach((t) => {
                     b.push(o(`${t}=${this.env[t]}`));
                   }), b.push(0);
-                  const a = i;
+                  const a = s;
                   if (b.forEach((t) => {
-                    this.mem.setUint32(i, t, !0), this.mem.setUint32(i + 4, 0, !0), i += 8;
-                  }), i >= 12288)
+                    this.mem.setUint32(s, t, !0), this.mem.setUint32(s + 4, 0, !0), s += 8;
+                  }), s >= 12288)
                     throw new Error("total length of command line and environment variables exceeds limit");
                   this._inst.exports.run(d, a), this.exited && this._resolveExitPromise(), yield this._exitPromise;
                 });
@@ -2202,10 +2202,10 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
                 this._inst.exports.resume(), this.exited && this._resolveExitPromise();
               }
               _makeFuncWrapper(f) {
-                const i = this;
+                const s = this;
                 return function() {
                   const o = { id: f, this: this, args: arguments };
-                  return i._pendingEvent = o, i._resume(), o.result;
+                  return s._pendingEvent = o, s._resume(), o.result;
                 };
               }
             };
@@ -2213,7 +2213,7 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
             let E = new TextDecoder(), p = $.fs, f = "";
             p.writeSync = (x, a) => {
               if (x === 1)
-                D(a);
+                U(a);
               else if (x === 2) {
                 f += E.decode(a);
                 let m = f.split(`
@@ -2224,24 +2224,24 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
                 throw new Error("Bad write");
               return a.length;
             };
-            let i = [], o, d = 0;
-            F = ({ data: x }) => (x.length > 0 && (i.push(x), o && o()), b), p.read = (x, a, m, t, l, w) => {
+            let s = [], o, d = 0;
+            F = ({ data: x }) => (x.length > 0 && (s.push(x), o && o()), b), p.read = (x, a, m, t, l, w) => {
               if (x !== 0 || m !== 0 || t !== a.length || l !== null)
                 throw new Error("Bad read");
-              if (i.length === 0) {
+              if (s.length === 0) {
                 o = () => p.read(x, a, m, t, l, w);
                 return;
               }
-              let v = i[0], T = Math.max(0, Math.min(t, v.length - d));
-              a.set(v.subarray(d, d + T), m), d += T, d === v.length && (i.shift(), d = 0), w(null, T);
+              let v = s[0], T = Math.max(0, Math.min(t, v.length - d));
+              a.set(v.subarray(d, d + T), m), d += T, d === v.length && (s.shift(), d = 0), w(null, T);
             };
             let b = new $.Go();
             return b.argv = ["", "--service=0.24.0"], z(S, b).then(
               (x) => {
-                D(null), b.run(x);
+                U(null), b.run(x);
               },
               (x) => {
-                D(x);
+                U(x);
               }
             ), b;
           };
@@ -2258,67 +2258,67 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
             });
           }
           return (S) => F(S);
-        })((D) => c.onmessage({ data: D })), V;
+        })((U) => c.onmessage({ data: U })), L;
         c = {
           onmessage: null,
-          postMessage: (D) => setTimeout(() => {
+          postMessage: (U) => setTimeout(() => {
             try {
-              V = P({ data: D });
+              L = P({ data: U });
             } catch (M) {
               g(M);
             }
           }),
           terminate() {
-            if (V)
-              for (let D of V._scheduledTimeouts.values())
-                clearTimeout(D);
+            if (L)
+              for (let U of L._scheduledTimeouts.values())
+                clearTimeout(U);
           }
         };
       }
       let h, _;
-      const u = new Promise((P, V) => {
-        h = P, _ = V;
+      const u = new Promise((P, L) => {
+        h = P, _ = L;
       });
       c.onmessage = ({ data: P }) => {
-        c.onmessage = ({ data: V }) => U(V), P ? _(P) : h();
+        c.onmessage = ({ data: L }) => R(L), P ? _(P) : h();
       }, c.postMessage(n || new URL(e, location.href).toString());
-      let { readFromStdout: U, service: R } = st({
+      let { readFromStdout: R, service: A } = it({
         writeToStdin(P) {
           c.postMessage(P);
         },
         isSync: !1,
         hasFS: !1,
-        esbuild: he
+        esbuild: we
       });
-      yield u, ve = () => {
-        c.terminate(), le = void 0, ve = void 0, be = void 0;
-      }, be = {
-        build: (P) => new Promise((V, D) => {
-          y.then(D), R.buildOrContext({
+      yield u, Ee = () => {
+        c.terminate(), ue = void 0, Ee = void 0, Se = void 0;
+      }, Se = {
+        build: (P) => new Promise((L, U) => {
+          y.then(U), A.buildOrContext({
             callName: "build",
             refs: null,
             options: P,
             isTTY: !1,
             defaultWD: "/",
-            callback: (M, F) => M ? D(M) : V(F)
+            callback: (M, F) => M ? U(M) : L(F)
           });
         }),
-        context: (P) => new Promise((V, D) => {
-          y.then(D), R.buildOrContext({
+        context: (P) => new Promise((L, U) => {
+          y.then(U), A.buildOrContext({
             callName: "context",
             refs: null,
             options: P,
             isTTY: !1,
             defaultWD: "/",
-            callback: (M, F) => M ? D(M) : V(F)
+            callback: (M, F) => M ? U(M) : L(F)
           });
         }),
-        transform: (P, V) => new Promise((D, M) => {
-          y.then(M), R.transform({
+        transform: (P, L) => new Promise((U, M) => {
+          y.then(M), A.transform({
             callName: "transform",
             refs: null,
             input: P,
-            options: V || {},
+            options: L || {},
             isTTY: !1,
             fs: {
               readFile(F, $) {
@@ -2328,51 +2328,73 @@ ${_}:${u}:${U}: ERROR: ${R}${y.text}`;
                 $(null);
               }
             },
-            callback: (F, $) => F ? M(F) : D($)
+            callback: (F, $) => F ? M(F) : U($)
           });
         }),
-        formatMessages: (P, V) => new Promise((D, M) => {
-          y.then(M), R.formatMessages({
+        formatMessages: (P, L) => new Promise((U, M) => {
+          y.then(M), A.formatMessages({
             callName: "formatMessages",
             refs: null,
             messages: P,
-            options: V,
-            callback: (F, $) => F ? M(F) : D($)
+            options: L,
+            callback: (F, $) => F ? M(F) : U($)
           });
         }),
-        analyzeMetafile: (P, V) => new Promise((D, M) => {
-          y.then(M), R.analyzeMetafile({
+        analyzeMetafile: (P, L) => new Promise((U, M) => {
+          y.then(M), A.analyzeMetafile({
             callName: "analyzeMetafile",
             refs: null,
             metafile: typeof P == "string" ? P : JSON.stringify(P),
-            options: V,
-            callback: (F, $) => F ? M(F) : D($)
+            options: L,
+            callback: (F, $) => F ? M(F) : U($)
           });
         })
       };
-    }), _t = he;
-  })(xe);
-})(Be);
-var We = Be.exports;
-let Se = !1;
-async function $t() {
-  Se || (await We.initialize({
+    }), _t = we;
+  })(ie);
+})(Ge);
+var qe = Ge.exports;
+let Pe = !1;
+async function Pt() {
+  Pe || (await qe.initialize({
     wasmURL: "https://unpkg.com/esbuild-wasm/esbuild.wasm",
     // Use the CDN for the WASM file
     worker: !0
     // Optional: Use Web Workers for better performance
-  }), Se = !0);
+  }), Pe = !0);
 }
-async function jt(xe) {
-  if (!Se)
+async function $t(ie) {
+  if (!Pe)
     throw new Error("Esbuild is not initialized. Call `initializeEsbuild` first.");
-  return (await We.transform(xe, {
+  return (await qe.transform(ie, {
     loader: "tsx",
     // Or 'ts' if no JSX
     target: "es2015"
   })).code;
 }
+const Ot = async (ie) => {
+  if (!ie)
+    return "";
+  try {
+    const ne = await $t(ie);
+    return jt(ne);
+  } catch (ne) {
+    ne instanceof Error ? console.error("Transpilation failed:", ne.message) : console.log("Transpilation failed:", ne);
+  }
+}, jt = async (ie) => {
+  const ne = new Blob([ie], { type: "application/javascript" }), oe = URL.createObjectURL(ne), ye = [], Te = console.log;
+  console.log = (ee) => ye.push(ee);
+  try {
+    await import(oe);
+  } catch (ee) {
+    return ee instanceof Error ? (console.log(ee.message), ee == null ? void 0 : ee.message) : (console.log(ee), ee);
+  }
+  return console.log = Te, URL.revokeObjectURL(oe), ye.join(`
+`);
+};
 export {
-  $t as initializeEsbuild,
-  jt as transpileCode
+  Pt as initializeEsbuild,
+  jt as runCode,
+  Ot as transpileAndRun,
+  $t as transpileCode
 };

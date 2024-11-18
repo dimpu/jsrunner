@@ -11,6 +11,8 @@ export const monacoOptions: editor.IStandaloneEditorConstructionOptions = {
   scrollbar: {
     vertical: 'hidden'
   },
-  fontSize: 12,
-  wordWrap: 'on'
+  wordWrap: 'on',
+  fontFamily: "Fira Code, monospace", // Set your desired font family
+  fontSize: 14, // Optional: Adjust the font size
+  fontLigatures: true, // Optional: Enable font ligatures (if supported by the font)
 }
