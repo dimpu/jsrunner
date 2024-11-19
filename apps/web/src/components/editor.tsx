@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { initializeEsbuild, transpileCode, transpileAndRun } from '@jsrunner/common';
+import { initializeEsbuild, transpileAndRun } from '@jsrunner/common';
 import MonacoEditor, { Monaco } from '@monaco-editor/react'
 import debounce from 'lodash-es/debounce';
 import { useAppState } from '../context/useAppState';
@@ -17,18 +17,24 @@ const Editor = () => {
   const { setCode } = useAppState();
 
   useEffect(() => {
-    initializeEsbuild().catch(console.error);
-    const localData = localStorage.getItem(LOCAL_RAW_CODE)
-    setRawCode(localData || '');
-    const compile = async () => {
+    (async () => {
+      const localData = localStorage.getItem(LOCAL_RAW_CODE)
+
       try {
-        const output = await transpileAndRun(localData as string);
-        setCode(output as string);
+        await initializeEsbuild()
       } catch (e) {
-        setCode(e as string);
+        console.log(e);
       }
-    }
-    compile();
+      setRawCode(localData || '');
+      setTimeout(async () => {
+        try {
+          const output = await transpileAndRun(localData as string);
+          setCode(output as string);
+        } catch (e) {
+          setCode(e as string);
+        }
+      }, 1000)
+    })();
   }, []);
 
   const transpileAndRunDebounce = debounce(async (code: string) => {
@@ -83,7 +89,7 @@ const Editor = () => {
         height={'100%'}
         defaultLanguage="typescript"
         theme="vs-dark"
-        onChange={(newValue) => transpileAndRunDebounce(newValue)}
+        onChange={(newValue) => transpileAndRunDebounce(newValue!)}
         onMount={handleMount}
         beforeMount={handleEditorWillMount}
         options={{ ...monacoOptions }}

@@ -2,20 +2,20 @@
 
 import * as esbuild from 'esbuild-wasm';
 
-let isInitialized = false;
+(window as any).isInitialized = false;
 
 export async function initializeEsbuild() {
-  if (!isInitialized) {
+  if (!(window as any).isInitialized) {
     await esbuild.initialize({
       wasmURL: 'https://unpkg.com/esbuild-wasm/esbuild.wasm', // Use the CDN for the WASM file
       worker: true, // Optional: Use Web Workers for better performance
     });
-    isInitialized = true;
+    (window as any).isInitialized = true;
   }
 }
 
 export async function transpileCode(inputCode: string) {
-  if (!isInitialized) {
+  if (!(window as any).isInitialized) {
     throw new Error('Esbuild is not initialized. Call `initializeEsbuild` first.');
   }
   const result = await esbuild.transform(inputCode, {
@@ -30,10 +30,8 @@ export async function transpileCode(inputCode: string) {
 
 export const transpileAndRun = async (code?: string) => {
   if (!code) {
-    // setCode('');
     return '';
   }
-  // localStorage.setItem(LOCAL_RAW_CODE, code)
 
   try {
     const output = await transpileCode(code);
@@ -62,17 +60,13 @@ export const runCode = async (code: string) => {
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message)
-      // setCode(error?.message);
       return error?.message;
     } else {
       console.log(error)
-      // setCode(error as string);
       return error;
     }
   }
-
   console.log = originalConsoleLog; // Restore console.log
-  // setCode(logs.join("\n"))
   URL.revokeObjectURL(blobUrl);
   return logs.join("\n");
 }
