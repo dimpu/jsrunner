@@ -1,6 +1,7 @@
 
 
 import * as esbuild from 'esbuild-wasm';
+import { cleanupTimers, createSafeTimer, timers } from './timer-optimizers';
 
 (window as any).isInitialized = false;
 
@@ -28,14 +29,43 @@ export async function transpileCode(inputCode: string) {
 
 
 
-export const transpileAndRun = async (code?: string) => {
+export const transpileAndRun = async (code?: string, timeoutDuration = 5000) => {
   if (!code) {
     return '';
   }
 
+  // Wrap the code with custom timer implementations
+  const wrappedCode = `
+    const { safeSetTimeout, safeSetInterval } = (${createSafeTimer.toString()})();
+    // Override global timer functions
+    const originalSetTimeout = window.setTimeout;
+    const originalSetInterval = window.setInterval;
+    window.setTimeout = safeSetTimeout;
+    window.setInterval = safeSetInterval;
+
+    ${code}
+  `;
+
   try {
     const output = await transpileCode(code);
-    const result = runCode(output);
+
+    // Create a promise that will reject after the timeout
+    const timeoutPromise = new Promise((_, reject) => {
+      const timeout = setTimeout(() => {
+        cleanupTimers();
+        reject(new Error('Execution timed out'));
+      }, timeoutDuration);
+      timers.timeouts.push(timeout);
+    });
+
+    const result = await Promise.race([
+      runCode(output),
+      timeoutPromise
+    ]);
+    // Restore original timer functions
+    window.setTimeout = (window as any)?.originalSetTimeout;
+    window.setInterval = (window as any)?.originalSetInterval;
+
     return result;
   } catch (error: unknown) {
     if (error instanceof Error) {

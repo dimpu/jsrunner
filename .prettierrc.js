@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   printWidth: 110,
   endOfLine: 'auto',
   singleQuote: true,
