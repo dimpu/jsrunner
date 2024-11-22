@@ -1,16 +1,17 @@
-// Track timers to clean them up
+//Track timers to clean them up
 export interface Timers {
   timeouts: NodeJS.Timeout[];
-  intervals: NodeJS.Timer[];
+  intervals: NodeJS.Timeout[];
 }
-export const timers = {
+
+export const timers: Timers = {
   timeouts: [],
   intervals: [],
 };
 
-// Custom setTimeout and setInterval implementations
+//Custom setTimeout and setInterval implementations
 export const createSafeTimer = () => {
-  const safeSetTimeout = (callback: Function, delay: number, ...args: any[]) => {
+  const safeSetTimeout = (callback: Function, delay: number, ...args: unknown[]) => {
     const timeout = setTimeout(() => {
       callback(...args);
       // Remove from tracking array once completed
@@ -23,7 +24,7 @@ export const createSafeTimer = () => {
     return timeout;
   };
 
-  const safeSetInterval = (callback: Function, delay: number, ...args: any[]) => {
+  const safeSetInterval = (callback: Function, delay: number, ...args: unknown[]) => {
     const interval = setInterval(() => {
       callback(...args);
     }, delay);

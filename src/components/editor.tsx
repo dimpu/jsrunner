@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { initializeEsbuild, transpileAndRun } from '@jsrunner/common';
+import { initializeEsbuild, transpileAndRun } from '@/libs/main';
 import MonacoEditor, { Monaco } from '@monaco-editor/react'
 import debounce from 'lodash-es/debounce';
 import { useAppState } from '../context/useAppState';
@@ -11,7 +11,6 @@ import Logo from "./nav-bar/logo.svg?react";
 const LOCAL_RAW_CODE = 'LOCAL_RAW_CODE';
 
 const Editor = () => {
-
   const monacoRef = useRef<editor.IStandaloneCodeEditor>()
   const [rawCode, setRawCode] = useState('');
   const { setCode } = useAppState();

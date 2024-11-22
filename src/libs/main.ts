@@ -1,22 +1,23 @@
-
-
 import * as esbuild from 'esbuild-wasm';
 import { cleanupTimers, createSafeTimer, timers } from './timer-optimizers';
 
-(window as any).isInitialized = false;
+
+let isInitialized = false;
+const originalSetTimeout = window.setTimeout;
+const originalSetInterval = window.setInterval;
 
 export async function initializeEsbuild() {
-  if (!(window as any).isInitialized) {
+  if (!isInitialized) {
     await esbuild.initialize({
       wasmURL: 'https://unpkg.com/esbuild-wasm/esbuild.wasm', // Use the CDN for the WASM file
       worker: true, // Optional: Use Web Workers for better performance
     });
-    (window as any).isInitialized = true;
+    isInitialized = true;
   }
 }
 
 export async function transpileCode(inputCode: string) {
-  if (!(window as any).isInitialized) {
+  if (!isInitialized) {
     throw new Error('Esbuild is not initialized. Call `initializeEsbuild` first.');
   }
   const result = await esbuild.transform(inputCode, {
@@ -26,8 +27,6 @@ export async function transpileCode(inputCode: string) {
 
   return result.code;
 }
-
-
 
 export const transpileAndRun = async (code?: string, timeoutDuration = 5000) => {
   if (!code) {
@@ -47,7 +46,7 @@ export const transpileAndRun = async (code?: string, timeoutDuration = 5000) => 
   `;
 
   try {
-    const output = await transpileCode(code);
+    const output = await transpileCode(wrappedCode);
 
     // Create a promise that will reject after the timeout
     const timeoutPromise = new Promise((_, reject) => {
@@ -63,8 +62,8 @@ export const transpileAndRun = async (code?: string, timeoutDuration = 5000) => 
       timeoutPromise
     ]);
     // Restore original timer functions
-    window.setTimeout = (window as any)?.originalSetTimeout;
-    window.setInterval = (window as any)?.originalSetInterval;
+    window.setTimeout = originalSetTimeout;
+    window.setInterval = originalSetInterval;
 
     return result;
   } catch (error: unknown) {
