@@ -2,15 +2,22 @@ import * as esbuild from 'esbuild-wasm';
 import { cleanupTimers, createSafeTimer, timers } from './timer-optimizers';
 
 export class JSRunner {
+  private static instance: JSRunner;
   private isInitialized: boolean = false;
   private originalSetTimeout: typeof window.setTimeout;
   private originalSetInterval: typeof window.setInterval;
 
   constructor() {
-    // Save the original setTimeout and setInterval functions
     this.originalSetTimeout = window.setTimeout;
     this.originalSetInterval = window.setInterval;
     this.initializeEsbuild();
+  }
+
+  static getInstance() {
+    if (!JSRunner.instance) {
+      JSRunner.instance = new JSRunner();
+    }
+    return JSRunner.instance;
   }
 
   async initializeEsbuild() {
@@ -53,7 +60,7 @@ export class JSRunner {
   `;
 
     try {
-      const output = await this.transpileCode(wrappedCode);
+      const output = await this.transpileCode(code);
 
       // Create a promise that will reject after the timeout
       const timeoutPromise = new Promise((_, reject) => {

@@ -25,7 +25,7 @@ export default defineConfig({
         name: 'JS Runner',
         short_name: 'A typescript/javascript playground',
         description: 'A typescript/javascript playground',
-        theme_color: '#ffffff',
+        theme_color: '#1e293b',
         display: "fullscreen",
         start_url: "/",
         icons: [
