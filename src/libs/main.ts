@@ -1,11 +1,29 @@
 import { cleanupTimers, createSafeTimer, timers } from './timer-optimizers';
+import { transpileModule, ScriptTarget, ModuleKind } from 'typescript';
+
 const originalSetTimeout = window.setTimeout;
 const originalSetInterval = window.setInterval;
+
+const transpileCode = (tsCode: string) => {
+  let code;
+  try {
+    code = transpileModule(tsCode, {
+      compilerOptions: {
+        target: ScriptTarget.ES2020,
+        module: ModuleKind.ESNext,
+      },
+    });
+  } catch (e) {
+    console.error('Transpilation Error', e);
+  }
+  return code?.outputText;
+};
 
 export const transpileAndRun = async (code?: string, timeoutDuration = 5000) => {
   if (!code) {
     return '';
   }
+  const result = transpileCode(code);
 
   // Wrap the code with custom timer implementations
   const wrappedCode = `
@@ -16,7 +34,7 @@ export const transpileAndRun = async (code?: string, timeoutDuration = 5000) => 
     window.setTimeout = safeSetTimeout;
     window.setInterval = safeSetInterval;
 
-    ${code}
+    ${result}
   `;
 
   try {
@@ -70,26 +88,3 @@ export const runCode = async (code: string) => {
   URL.revokeObjectURL(blobUrl);
   return logs.join('\n');
 };
-
-//
-// export async function initializeEsbuild() {
-//   if (!isInitialized) {
-//     await esbuild.initialize({
-//       wasmURL: 'https://unpkg.com/esbuild-wasm/esbuild.wasm', // Use the CDN for the WASM file
-//       worker: true, // Optional: Use Web Workers for better performance
-//     });
-//     isInitialized = true;
-//   }
-// }
-//
-// export async function transpileCode(inputCode: string) {
-//   if (!isInitialized) {
-//     throw new Error('Esbuild is not initialized. Call `initializeEsbuild` first.');
-//   }
-//   const result = await esbuild.transform(inputCode, {
-//     loader: 'tsx', // Or 'ts' if no JSX
-//     target: 'es2015',
-//   });
-//
-//   return result.code;
-// }
