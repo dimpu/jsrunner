@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-import tailwindcss from 'tailwindcss'
-import svgr from "vite-plugin-svgr";
-import { VitePWA } from 'vite-plugin-pwa'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import tailwindcss from 'tailwindcss';
+import svgr from 'vite-plugin-svgr';
+// import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path';
 const host = process.env.TAURI_DEV_HOST;
 
@@ -17,45 +17,45 @@ export default defineConfig({
   plugins: [
     react(),
     svgr(),
-    VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
-      devOptions: {
-        enabled: process.env.NODE_ENV !== "production", // Enable the PWA during development
-      },
-      manifest: {
-        name: 'JS Runner',
-        short_name: 'A typescript/javascript playground',
-        description: 'A typescript/javascript playground',
-        theme_color: '#1e293b',
-        display: "fullscreen",
-        start_url: "/",
-        icons: [
-          {
-            src: 'pwa-64x64.png',
-            sizes: '64x64',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any'
-          },
-          {
-            src: 'maskable-icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable'
-          }
-        ],
-      }
-    })
+    // VitePWA({
+    //   registerType: 'autoUpdate',
+    //   includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+    //   devOptions: {
+    //     enabled: process.env.NODE_ENV !== "production", // Enable the PWA during development
+    //   },
+    //   manifest: {
+    //     name: 'JS Runner',
+    //     short_name: 'A typescript/javascript playground',
+    //     description: 'A typescript/javascript playground',
+    //     theme_color: '#1e293b',
+    //     display: "fullscreen",
+    //     start_url: "/",
+    //     icons: [
+    //       {
+    //         src: 'pwa-64x64.png',
+    //         sizes: '64x64',
+    //         type: 'image/png'
+    //       },
+    //       {
+    //         src: 'pwa-192x192.png',
+    //         sizes: '192x192',
+    //         type: 'image/png'
+    //       },
+    //       {
+    //         src: 'pwa-512x512.png',
+    //         sizes: '512x512',
+    //         type: 'image/png',
+    //         purpose: 'any'
+    //       },
+    //       {
+    //         src: 'maskable-icon-512x512.png',
+    //         sizes: '512x512',
+    //         type: 'image/png',
+    //         purpose: 'maskable'
+    //       }
+    //     ],
+    //   }
+    // })
   ],
   css: {
     postcss: {
@@ -72,17 +72,17 @@ export default defineConfig({
     host: host || false,
     hmr: host
       ? {
-        protocol: "ws",
-        host,
-        port: 1421,
-      }
+          protocol: 'ws',
+          host,
+          port: 1421,
+        }
       : undefined,
     watch: {
       // 3. tell vite to ignore watching `src-tauri`
-      ignored: ["**/src-tauri/**"],
+      ignored: ['**/src-tauri/**'],
     },
   },
-})
+});
 
 //
 //

@@ -1,0 +1,56 @@
+name: Tauri Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger on version tags (e.g., v1.0.0)
+
+jobs:
+  release:
+    name: Build and Release Tauri App
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: |
+          corepack enable
+          pnpm install
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt
+          override: true
+
+      - name: Install Tauri Bundler
+        run: cargo install tauri-cli --locked
+
+      - name: Build Web App
+        run: pnpm build
+
+      - name: Build Tauri App
+        run: pnpm tauri build
+
+      - name: Upload Release Assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: tauri-release
+          path: src-tauri/target/release/bundle/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            src-tauri/target/release/bundle/**/*.*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

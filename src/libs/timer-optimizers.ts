@@ -11,7 +11,7 @@ export const timers: Timers = {
 
 //Custom setTimeout and setInterval implementations
 export const createSafeTimer = () => {
-  const safeSetTimeout = (callback: (...args: unknown) => unknown, delay: number, ...args: unknown[]) => {
+  const safeSetTimeout = (callback: (...args: unknown[]) => unknown, delay: number, ...args: unknown[]) => {
     const timeout = setTimeout(() => {
       callback(...args);
       // Remove from tracking array once completed
