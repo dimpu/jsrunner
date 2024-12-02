@@ -1,7 +1,11 @@
+let worker: Worker;
+
 export const transpileAndRunWithWorker = async (tsCode: string, timeoutDuration = 5000) => {
   if (!tsCode) return '';
 
-  const worker = new Worker('./worker.js');
+  if (worker) worker.terminate();
+
+  worker = new Worker('./worker.js');
   const logs: string[] = [];
 
   const workerPromise = (action: string, code: string) =>
