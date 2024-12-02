@@ -5,7 +5,7 @@ import { useAppState } from '../context/useAppState';
 import { editor } from 'monaco-editor';
 import { monacoOptions } from '../constants/monaco-options';
 import Logo from './nav-bar/logo.svg?react';
-import { transpileAndRun } from '@/libs/main';
+import { transpileAndRunWithWorker } from '@/libs/main';
 
 const LOCAL_RAW_CODE = 'LOCAL_RAW_CODE';
 
@@ -31,7 +31,7 @@ const Editor = () => {
     localStorage.setItem(LOCAL_RAW_CODE, code);
 
     try {
-      const output = await transpileAndRun(code);
+      const output = await transpileAndRunWithWorker(code);
       setCode(output as string);
     } catch (e) {
       setCode(e as string);

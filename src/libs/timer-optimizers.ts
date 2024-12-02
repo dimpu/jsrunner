@@ -24,7 +24,7 @@ export const createSafeTimer = () => {
     return timeout;
   };
 
-  const safeSetInterval = (callback: (...args: any) => any, delay: number, ...args: unknown[]) => {
+  const safeSetInterval = (callback: (...args: unknown[]) => unknown, delay: number, ...args: unknown[]) => {
     const interval = setInterval(() => {
       callback(...args);
     }, delay);
@@ -35,7 +35,6 @@ export const createSafeTimer = () => {
   return { safeSetTimeout, safeSetInterval };
 };
 
-// Clean up all timers
 export const cleanupTimers = () => {
   timers.timeouts.forEach(timeout => clearTimeout(timeout));
   timers.intervals.forEach(interval => clearInterval(interval));
