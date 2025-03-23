@@ -1,5 +1,5 @@
 {
-  "name": "JSRunner",
+  "name": "js-runner",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,6 +10,8 @@
     "preview": "vite preview",
     "desktop": "pnpm tauri dev",
     "desktop:build": "pnpm tauri build",
+    "desktop:win:build": "pnpm tauri build --bundles dmg",
+    "desktop:linux:build": "pnpm tauri build --bundles dmg",
     "prepare": "husky",
     "format": "prettier --write .",
     "tauri": "tauri",
